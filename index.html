@@ -743,6 +743,97 @@ button {
   font-size: 16px;
 }
 ``
+
+
+/* ============================
+   iOS Zoom Fix – Exercise Search
+   ============================ */
+#exerciseSearch {
+  font-size: 16px !important;
+  line-height: 1.2;
+}
+
+/* ============================
+   Create Modal – Button Layout
+   ============================ */
+#createModal .actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#createSaveButton {
+  order: 1;
+}
+
+#createCancelButton {
+  order: 2;
+}
+
+/* ============================
+   Mobile FAB Buttons – Centered
+   ============================ */
+.fab-bar {
+  justify-content: center;
+  gap: 14px;
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-bottom: 30px;
+}
+
+.fab {
+  flex: 1;
+  max-width: 46%;
+  text-align: center;
+  padding: 16px 0;
+  border-radius: 14px; /* eckiger als vorher */
+}
+/* ============================
+   Exercise Search Dropdown
+   ============================ */
+.exercise-dropdown {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+}
+
+.exercise-dropdown input {
+  font-size: 16px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+}
+
+.exercise-dropdown-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background: rgba(8,9,12,0.98);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  list-style: none;
+  padding: 4px;
+  margin: 0;
+  z-index: 100;
+  display: none;
+}
+
+.exercise-dropdown-list li {
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.exercise-dropdown-list li:hover {
+  background: rgba(255,255,255,0.06);
+}
+
     </style>
 </head>
 
@@ -891,7 +982,17 @@ button {
                     <div class="chart-wrap" style="margin-top: 14px;">
                         <div class="chart-row">
                             <label for="setsExerciseSelect" style="margin:0; min-width: 220px;">Exercise</label>
-                            <select id="setsExerciseSelect"></select>
+                            
+			    <div id="setsExerciseDropdown" class="exercise-dropdown">
+  				<input
+   				 type="text"
+   				 id="setsExerciseSearch"
+   				 placeholder="Select exercise"
+   				 autocomplete="off"
+  				/>
+  				<ul id="setsExerciseList" class="exercise-dropdown-list"></ul>
+			    </div>
+
 
                             <label for="setsDaySelect" style="margin:0; min-width: 90px;">Day</label>
                             <select id="setsDaySelect"></select>
@@ -1686,6 +1787,8 @@ button {
                 await loadExercises();
                 await refreshWorkoutCache(user.uid);
 
+		populateSetsExerciseDropdown();
+
                 renderOverallChartAndExercisesList();
                 preselectDefaultExerciseAndRender();
             } else {
@@ -1778,7 +1881,52 @@ async function loadExercises() {
     });
   });
 }
+// ============================
+// Sets – Exercise Search Dropdown
+// ============================
 
+const setsExerciseSearch = document.getElementById('setsExerciseSearch');
+const setsExerciseList = document.getElementById('setsExerciseList');
+
+function populateSetsExerciseDropdown() {
+  if (!setsExerciseList) return;
+  setsExerciseList.innerHTML = '';
+
+  for (const [key, name] of clientSideExercisesMap.entries()) {
+    const li = document.createElement('li');
+    li.textContent = name;
+    li.dataset.key = key;
+
+    li.addEventListener('click', async () => {
+      setsExerciseSearch.value = name;
+      setsExerciseList.style.display = 'none';
+
+      await renderSetsChartsForExercise(key, null, true);
+    });
+
+    setsExerciseList.appendChild(li);
+  }
+}
+
+if (setsExerciseSearch) {
+  setsExerciseSearch.addEventListener('input', () => {
+    const q = setsExerciseSearch.value.toLowerCase();
+    const items = setsExerciseList.querySelectorAll('li');
+
+    items.forEach(li => {
+      li.style.display =
+        li.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+    });
+
+    setsExerciseList.style.display = 'block';
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#setsExerciseDropdown')) {
+      setsExerciseList.style.display = 'none';
+    }
+  });
+}
         createNewExerciseInput.addEventListener('input', () => {
             const inputVal = createNewExerciseInput.value.trim();
             createExerciseValidationMessage.style.display = 'none';
