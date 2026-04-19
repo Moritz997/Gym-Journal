@@ -286,6 +286,9 @@
          cursor: pointer;
          user-select: none;
          }
+         #exerciseLogView .exercise-row {
+         cursor: default;
+         }
          .exercise-row:hover {
          border-color: rgba(255,255,255,0.16);
          background: rgba(255,255,255,0.05);
@@ -322,7 +325,10 @@
          }
          .chart-row select {
          width: auto;
-         max-width: 420px;
+         max-width: 240px;
+         }
+         #progressExerciseSelect {
+         min-width: 180px;
          }
          #message {
          margin-top: 16px;
@@ -840,6 +846,14 @@
                      </div>
                      <canvas id="volumePerDayChart"></canvas>
                   </div>
+                  <div style="height: 14px;"></div>
+                  <div class="chart-wrap">
+                     <canvas id="weightPerDayChart"></canvas>
+                  </div>
+                  <div style="height: 14px;"></div>
+                  <div class="chart-wrap">
+                     <canvas id="repsPerDayChart"></canvas>
+                  </div>
                </div>
             </div>
             <!-- SETS VIEW -->
@@ -902,6 +916,9 @@
                      </div>
                      <canvas id="volumePerSetChart"></canvas>
                   </div>
+                  <div class="chart-wrap">
+                     <canvas id="repsPerSetChart"></canvas>
+                  </div>
                </div>
             </div>
          </div>
@@ -936,6 +953,10 @@
                <li class="menu-item" id="menuSets">
                   <span>Sets</span>
                   <span class="pill">Tab</span>
+               </li>
+               <li class="menu-item" id="menuExerciseLog">
+                  <span>Exercise Log</span>
+                  <span class="pill">Data</span>
                </li>
             </ul>
             <div class="card" style="padding: 14px;">
@@ -998,6 +1019,30 @@
             <div class="login-actions">
                <button id="loginOverlayButton" class="accent-btn">Login</button>
                <button id="registerOverlayButton" class="link-btn muted">Create account</button>
+            </div>
+         </div>
+      </div>
+      <div id="exerciseLogView" class="view">
+         <div class="card">
+            <div class="headline">Exercise Log</div>
+            <ul id="exerciseLogList"></ul>
+         </div>
+      </div>
+      <div id="editModal" class="modal">
+         <div class="modal-overlay"></div>
+         <div class="modal-panel">
+            <div class="modal-header">
+               <div class="modal-title">Edit Entry</div>
+               <button class="modal-close">Close</button>
+            </div>
+            <label>Repetitions</label>
+            <input type="number" id="editRepsInput">
+            <label>Weight (kg)</label>
+            <input type="number" id="editWeightInput" step="0.1">
+            <label>RPE</label>
+            <input type="number" id="editRpeInput" min="0" max="10">
+            <div class="actions">
+               <button id="editSaveButton" class="link-btn accent">Save</button>
             </div>
          </div>
       </div>
@@ -1073,6 +1118,10 @@
          const e1rmPerDayChartCanvas = document.getElementById('e1rmPerDayChart');
          const maxWeightPerDayChartCanvas = document.getElementById('maxWeightPerDayChart');
          const volumePerDayChartCanvas = document.getElementById('volumePerDayChart');
+         
+         const weightPerDayChartCanvas = document.getElementById('weightPerDayChart');
+         const repsPerDayChartCanvas = document.getElementById('repsPerDayChart');
+         
          
          const setsDaySelect = document.getElementById('setsDaySelect');
          const setsPrevDayButton = document.getElementById('setsPrevDayButton');
@@ -1192,12 +1241,19 @@
          let maxWeightPerSetChartInstance = null;
          let volumePerSetChartInstance = null;
          
+         let weightPerDayChartInstance = null;
+         let repsPerDayChartInstance = null;
+         
+         let repsPerSetChartInstance = null;
+         
+         
          // ============================
          // Client caches
          // ============================
          let clientSideExercisesMap = new Map(); // exerciseKey -> displayName
          let cachedAllWorkouts = [];            // all workouts for user (asc)
          let cachedUserId = null;
+         let editWorkoutId = null;
          
          // ============================
          // Sorting state (exercise list)
@@ -1379,6 +1435,11 @@
          }
          
          
+         function displayExerciseName(name) {
+         return (name || '').toUpperCase();
+         }
+         
+         
          // ============================
          // Drawer + Tabs
          // ============================
@@ -1428,6 +1489,19 @@
              }, 80);
          });
          
+         const menuExerciseLog = document.getElementById('menuExerciseLog');
+         const exerciseLogView = document.getElementById('exerciseLogView');
+         
+         menuExerciseLog.addEventListener('click', () => {
+         activateTab(null);
+         trainingView.classList.remove('active');
+         progressView.classList.remove('active');
+         setsView.classList.remove('active');
+         exerciseLogView.classList.add('active');
+         closeDrawer();
+         renderExerciseLog();
+         });
+         
          
          // ============================
          // Sort Menu (Exercises list)
@@ -1473,6 +1547,11 @@
          // ============================
          // Modal helpers
          // ============================
+         
+         
+         const editModal = document.getElementById('editModal');
+         const editModalOverlay = editModal.querySelector('.modal-overlay');
+         const editModalCloseBtn = editModal.querySelector('.modal-close');
          
          function closeCreateModal() {
              createModal.classList.remove('open');
@@ -1711,13 +1790,13 @@
          clientSideExercisesMap.set(exerciseKey, name);
          
          if (progressExerciseSelect) {
-         const opt = new Option(name, exerciseKey);
+         const opt = new Option(displayExerciseName(name), exerciseKey);
          progressExerciseSelect.appendChild(opt);
          }
          
          
          if (createExerciseSelect) {
-         const opt = new Option(name, exerciseKey);
+         const opt = new Option(displayExerciseName(name), exerciseKey);
          createExerciseSelect.appendChild(opt);
          }
          });
@@ -1736,7 +1815,7 @@
          
          for (const [key, name] of clientSideExercisesMap.entries()) {
          const li = document.createElement('li');
-         li.textContent = name;
+         li.textContent = displayExerciseName(name);
          li.dataset.key = key;
          
          
@@ -1776,7 +1855,7 @@
          
          scored.forEach(({ key, name }) => {
          const li = document.createElement('li');
-         li.textContent = name;
+         li.textContent = displayExerciseName(name);
          li.dataset.key = key;
          
          li.addEventListener('click', async () => {
@@ -1865,6 +1944,111 @@
                  }
              });
          }
+         
+         function renderExerciseLog() {
+         const list = document.getElementById('exerciseLogList');
+         if (!list) return;
+         
+         list.innerHTML = '';
+         
+         const items = cachedAllWorkouts.slice().reverse(); // neueste oben
+         
+         if (!items.length) {
+         list.innerHTML = '<li class="exercise-row">No entries yet.</li>';
+         return;
+         }
+         
+         items.forEach(item => {
+         const li = document.createElement('li');
+         li.className = 'exercise-row';
+         
+         const left = document.createElement('span');
+         left.className = 'exercise-name';
+         left.textContent =
+         `${formatDayKeyDE(getLocalDayKey(item.timestamp))} – ${item.exerciseDisplay || item.exercise}`;
+         
+         const right = document.createElement('span');
+         right.className = 'exercise-metric';
+         right.textContent =
+         `${item.weight} kg × ${item.repetitions} reps`;
+         
+         // Buttons
+         const editBtn = document.createElement('button');
+         editBtn.textContent = '✏️';
+         editBtn.className = 'link-btn muted';
+         
+         const deleteBtn = document.createElement('button');
+         deleteBtn.textContent = '🗑';
+         deleteBtn.className = 'link-btn danger';
+         
+         // 👉 HIER kommen gleich Delete & Edit rein
+         
+         const actions = document.createElement('div');
+         actions.style.display = 'flex';
+         actions.style.gap = '8px';
+         actions.append(editBtn, deleteBtn);
+         
+         li.append(left, right, actions);
+         list.appendChild(li);
+         
+         deleteBtn.addEventListener('click', async () => {
+         if (!confirm('Delete this entry?')) return;
+         
+         await db.collection('workouts').doc(item.id).delete();
+         
+         await refreshWorkoutCache(auth.currentUser.uid);
+         renderExerciseLog();
+         });
+         
+         editBtn.addEventListener('click', () => {
+         editWorkoutId = item.id;
+         
+         document.getElementById('editRepsInput').value = item.repetitions;
+         document.getElementById('editWeightInput').value = item.weight;
+         document.getElementById('editRpeInput').value = item.rpe ?? '';
+         
+         document.getElementById('editModal').classList.add('open');
+         });
+         });
+         
+         function closeEditModal() {
+         editWorkoutId = null;
+         editModal.classList.remove('open');
+         }
+         
+         
+         editModalOverlay.addEventListener('click', closeEditModal);
+         editModalCloseBtn.addEventListener('click', closeEditModal);
+         
+         
+         document.getElementById('editSaveButton').addEventListener('click', async () => {
+         if (!editWorkoutId) return;
+         
+         await db.collection('workouts').doc(editWorkoutId).update({
+         repetitions: Number(editRepsInput.value),
+         weight: Number(editWeightInput.value),
+         rpe: Number(editRpeInput.value),
+         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+         });
+         
+         await refreshWorkoutCache(auth.currentUser.uid);
+         closeEditModal();
+         
+         
+         renderExerciseLog();
+         
+         if (tabProgress.classList.contains('active')) {
+         renderProgressChartsForExercise(getSelectedExerciseKey());
+         }
+         
+         if (tabSets.classList.contains('active')) {
+         renderSetsChartsForExercise(
+         activeSetsExerciseKey,
+         setsDaySelect.value,
+         false
+         );
+         }
+         });
          
          function preselectDefaultExerciseAndRender() {
              const firstKey = progressExerciseSelect.options.length > 1
@@ -2137,6 +2321,10 @@
                  maxWeightPerDayChartInstance = destroyChart(maxWeightPerDayChartInstance);
                  volumePerDayChartInstance = destroyChart(volumePerDayChartInstance);
          
+         weightPerDayChartInstance = destroyChart(weightPerDayChartInstance);
+         repsPerDayChartInstance = destroyChart(repsPerDayChartInstance);
+         
+         
                  if (!items.length) {
                      displayMessage("No data in selected range.", true);
                      return;
@@ -2336,7 +2524,57 @@
                              }
                          }
                      });
+         
                  }
+         weightPerDayChartInstance = destroyChart(weightPerDayChartInstance);
+         
+         {
+         const { labels, dataPoints } = buildDailySeries(items, (m, dk, x) => {
+         const w = Number(x.weight || 0);
+         m.set(dk, Math.max(m.get(dk) || 0, w));
+         });
+         
+         weightPerDayChartInstance = new Chart(weightPerDayChartCanvas, {
+         type: 'line',
+         data: {
+         labels,
+         datasets: [{
+         data: dataPoints,
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.10)',
+         borderWidth: 2,
+         tension: 0.2,
+         fill: false,
+         pointRadius: 3,
+         }]
+         },
+         options: baseChartOptions(`Weight per Day – ${displayName}`, 'kg', true)
+         });
+         }
+         repsPerDayChartInstance = destroyChart(repsPerDayChartInstance);
+         
+         {
+         const { labels, dataPoints } = buildDailySeries(items, (m, dk, x) => {
+         m.set(dk, (m.get(dk) || 0) + Number(x.repetitions || 0));
+         });
+         
+         repsPerDayChartInstance = new Chart(repsPerDayChartCanvas, {
+         type: 'line',
+         data: {
+         labels,
+         datasets: [{
+         data: dataPoints,
+         borderColor: 'rgba(255,176,32,1)',
+         backgroundColor: 'rgba(255,176,32,0.10)',
+         borderWidth: 2,
+         tension: 0.2,
+         fill: false,
+         pointRadius: 3,
+         }]
+         },
+         options: baseChartOptions(`Repetitions per Day – ${displayName}`, 'Reps', true)
+         });
+         }
          
                  displayMessage("Charts updated.", false);
              } catch (error) {
