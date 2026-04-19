@@ -296,6 +296,7 @@
          .exercise-name {
          font-size: 14px;
          color: var(--text);
+         text-transform: uppercase;
          }
          .exercise-metric {
          font-size: 13px;
@@ -682,6 +683,14 @@
          order: 2;
          }
          /* ============================
+         Edit Modal – Button Layout
+         ============================ */
+         #editWorkoutModal .actions {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         }
+         /* ============================
          Mobile FAB Buttons – Centered
          ============================ */
          .fab-bar {
@@ -714,6 +723,7 @@
          border: 1px solid rgba(255,255,255,0.15);
          background: rgba(255,255,255,0.04);
          color: var(--text);
+         text-transform: uppercase;
          }
          .exercise-dropdown-list {
          position: absolute;
@@ -735,6 +745,7 @@
          padding: 8px 10px;
          border-radius: 10px;
          cursor: pointer;
+         text-transform: uppercase;
          }
          .exercise-dropdown-list li:hover {
          background: rgba(255,255,255,0.06);
@@ -794,6 +805,48 @@
          #closeExerciseLogBtn {
          display: inline-flex;
          }
+         }
+         /* ============================
+         Exercise Log – Entry Layout
+         ============================ */
+         .exercise-log-row {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         gap: 12px;
+         padding: 12px;
+         border: 1px solid var(--border);
+         border-radius: 14px;
+         background: rgba(255,255,255,0.03);
+         }
+         .exercise-log-content {
+         display: flex;
+         align-items: center;
+         gap: 12px;
+         white-space: nowrap;
+         }
+         .exercise-log-date {
+         font-size: 12px;
+         color: var(--muted);
+         }
+         .exercise-log-name {
+         font-size: 14px;
+         font-weight: 700;
+         letter-spacing: 0.4px;
+         }
+         .exercise-log-meta {
+         font-size: 13px;
+         color: var(--muted);
+         }
+         .exercise-log-arrow {
+         font-size: 18px;
+         font-weight: 700;
+         color: var(--muted);
+         cursor: pointer;
+         user-select: none;
+         }
+         .exercise-log-arrow:hover {
+         color: var(--text);
          }
       </style>
    </head>
@@ -920,7 +973,7 @@
                   <div id="loginHintSets" class="login-hint" style="display:none; margin-top: 12px;">
                      You are not logged in. Use <b>Account</b> to log in.
                   </div>
-                  <div class="chart-wrap" style="margin-top: 14px;">
+                  <div class="card" style="margin-top:14px;">
                      <div class="chart-row">
                         <label for="setsExerciseSearch" style="margin:0; min-width: 220px;">Exercise</label>
                         <div id="setsExerciseDropdown" class="exercise-dropdown">
@@ -1065,6 +1118,28 @@
             </div>
          </div>
       </div>
+      <!-- Edit Workout Modal -->
+      <div id="editWorkoutModal" class="modal" aria-hidden="true">
+         <div class="modal-overlay"></div>
+         <div class="modal-panel">
+            <div class="modal-header">
+               <div class="modal-title">Edit Workout Entry</div>
+               <button id="editDeleteButton" class="link-btn danger">Delete</button>
+            </div>
+            <label>Exercise</label>
+            <input type="text" id="editExerciseInput" disabled />
+            <label>Repetitions</label>
+            <input type="number" id="editRepsInput" />
+            <label>Weight (kg)</label>
+            <input type="number" id="editWeightInput" step="0.1" />
+            <label>RPE</label>
+            <input type="number" id="editRpeInput" min="0" max="10" />
+            <div class="actions">
+               <button id="editSaveButton" class="link-btn accent">Save</button>
+               <button id="editCancelButton" class="link-btn muted">Cancel</button>
+            </div>
+         </div>
+      </div>
       <!-- Login Overlay -->
       <div id="loginOverlay" class="login-overlay hidden">
          <div class="login-panel">
@@ -1075,24 +1150,6 @@
             <div class="login-actions">
                <button id="loginOverlayButton" class="accent-btn">Login</button>
                <button id="registerOverlayButton" class="link-btn muted">Create account</button>
-            </div>
-         </div>
-      </div>
-      <div id="editModal" class="modal">
-         <div class="modal-overlay"></div>
-         <div class="modal-panel">
-            <div class="modal-header">
-               <div class="modal-title">Edit Entry</div>
-               <button class="modal-close">Close</button>
-            </div>
-            <label>Repetitions</label>
-            <input type="number" id="editRepsInput">
-            <label>Weight (kg)</label>
-            <input type="number" id="editWeightInput" step="0.1">
-            <label>RPE</label>
-            <input type="number" id="editRpeInput" min="0" max="10">
-            <div class="actions">
-               <button id="editSaveButton" class="link-btn accent">Save</button>
             </div>
          </div>
       </div>
@@ -1509,6 +1566,57 @@
          }
          
          
+         function openEditWorkoutModal(item) {
+         // ✅ Exercise Log Sheet schließen
+         exerciseLogSheet.classList.remove('open');
+         exerciseLogSheet.setAttribute('aria-hidden', 'true');
+         
+         editWorkoutId = item.id;
+         
+         document.getElementById('editExerciseInput').value =
+         item.exerciseDisplay || item.exercise;
+         
+         document.getElementById('editRepsInput').value = item.repetitions;
+         document.getElementById('editWeightInput').value = item.weight;
+         document.getElementById('editRpeInput').value = item.rpe ?? '';
+         
+         // ✅ Edit-Modal öffnen
+         document.getElementById('editWorkoutModal').classList.add('open');
+         }
+         
+         
+         document.getElementById('editCancelButton').addEventListener('click', () => {
+         editWorkoutId = null;
+         document.getElementById('editWorkoutModal').classList.remove('open');
+         });
+         
+         document.getElementById('editSaveButton').addEventListener('click', async () => {
+         if (!editWorkoutId) return;
+         
+         await db.collection('workouts').doc(editWorkoutId).update({
+         repetitions: Number(editRepsInput.value),
+         weight: Number(editWeightInput.value),
+         rpe: Number(editRpeInput.value),
+         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+         });
+         
+         await refreshWorkoutCache(auth.currentUser.uid);
+         renderExerciseLog();
+         
+         document.getElementById('editWorkoutModal').classList.remove('open');
+         });
+         
+         document.getElementById('editDeleteButton').addEventListener('click', async () => {
+         if (!editWorkoutId) return;
+         if (!confirm('Delete this entry?')) return;
+         
+         await db.collection('workouts').doc(editWorkoutId).delete();
+         await refreshWorkoutCache(auth.currentUser.uid);
+         
+         renderExerciseLog();
+         document.getElementById('editWorkoutModal').classList.remove('open');
+         });
+         
          // ============================
          // Drawer + Tabs
          // ============================
@@ -1615,12 +1723,7 @@
          // ============================
          // Modal helpers
          // ============================
-         
-         
-         const editModal = document.getElementById('editModal');
-         const editModalOverlay = editModal.querySelector('.modal-overlay');
-         const editModalCloseBtn = editModal.querySelector('.modal-close');
-         
+                
          
          // Exercise Log Sheet – Close button
          closeExerciseLogBtn.addEventListener('click', closeExerciseLogSheet);
@@ -2032,7 +2135,7 @@
          
          list.innerHTML = '';
          
-         const items = cachedAllWorkouts.slice().reverse(); // neueste oben
+         const items = cachedAllWorkouts.slice().reverse();
          
          if (!items.length) {
          list.innerHTML = '<li class="exercise-row">No entries yet.</li>';
@@ -2040,66 +2143,40 @@
          }
          
          items.forEach(item => {
-         const li = document.createElement('li');
-         li.className = 'exercise-row';
+         const row = document.createElement('li');
+         row.className = 'exercise-log-row';
          
-         const left = document.createElement('span');
-         left.className = 'exercise-name';
-         left.textContent =
-         `${formatDayKeyDE(getLocalDayKey(item.timestamp))} – ${item.exerciseDisplay || item.exercise}`;
+         // Links: Content
+         const content = document.createElement('div');
+         content.className = 'exercise-log-content';
          
-         const right = document.createElement('span');
-         right.className = 'exercise-metric';
-         right.textContent =
-         `${item.weight} kg × ${item.repetitions} reps`;
+         const date = document.createElement('div');
+         date.className = 'exercise-log-date';
+         date.textContent = formatDayKeyDE(getLocalDayKey(item.timestamp));
          
-         // Buttons
-         const editBtn = document.createElement('button');
-         editBtn.textContent = '✏️';
-         editBtn.className = 'link-btn muted';
+         const name = document.createElement('div');
+         name.className = 'exercise-log-name';
+         name.textContent = (item.exerciseDisplay || item.exercise).toUpperCase();
          
-         const deleteBtn = document.createElement('button');
-         deleteBtn.textContent = '🗑';
-         deleteBtn.className = 'link-btn danger';
+         const meta = document.createElement('div');
+         meta.className = 'exercise-log-meta';
+         meta.textContent = `${item.repetitions} reps × ${item.weight} kg`;
          
-         // 👉 HIER kommen gleich Delete & Edit rein
+         content.append(date, name, meta);
          
-         const actions = document.createElement('div');
-         actions.style.display = 'flex';
-         actions.style.gap = '8px';
-         actions.append(editBtn, deleteBtn);
+         // Rechts: Pfeil
+         const arrow = document.createElement('div');
+         arrow.className = 'exercise-log-arrow';
+         arrow.textContent = '>';
          
-         li.append(left, right, actions);
-         list.appendChild(li);
-         
-         deleteBtn.addEventListener('click', async () => {
-         if (!confirm('Delete this entry?')) return;
-         
-         await db.collection('workouts').doc(item.id).delete();
-         
-         await refreshWorkoutCache(auth.currentUser.uid);
-         renderExerciseLog();
+         arrow.addEventListener('click', () => {
+         openEditWorkoutModal(item);
          });
          
-         editBtn.addEventListener('click', () => {
-         editWorkoutId = item.id;
-         
-         document.getElementById('editRepsInput').value = item.repetitions;
-         document.getElementById('editWeightInput').value = item.weight;
-         document.getElementById('editRpeInput').value = item.rpe ?? '';
-         
-         document.getElementById('editModal').classList.add('open');
-         });
+         row.append(content, arrow);
+         list.appendChild(row);
          });
          }
-         function closeEditModal() {
-         editWorkoutId = null;
-         editModal.classList.remove('open');
-         }
-         
-         
-         editModalOverlay.addEventListener('click', closeEditModal);
-         editModalCloseBtn.addEventListener('click', closeEditModal);
          
          
          document.getElementById('editSaveButton').addEventListener('click', async () => {
