@@ -739,6 +739,62 @@
          .exercise-dropdown-list li:hover {
          background: rgba(255,255,255,0.06);
          }
+         /* ============================
+         Exercise Log Bottom Sheet
+         ============================ */
+         .sheet {
+         position: fixed;
+         inset: 0;
+         background: rgba(8,9,12,0.96);
+         z-index: 1000;
+         transform: translateY(100%);
+         transition: transform 280ms cubic-bezier(.22,.61,.36,1);
+         display: flex;
+         flex-direction: column;
+         }
+         .sheet.open {
+         transform: translateY(0);
+         }
+         /* ===== Mobile DEFAULT ===== */
+         /* Fullscreen, Swipe-Handle sichtbar, kein Close-Button */
+         .sheet-handle {
+         width: 42px;
+         height: 5px;
+         background: rgba(255,255,255,0.9);
+         border-radius: 999px;
+         margin: 10px auto 6px auto;
+         }
+         #closeExerciseLogBtn {
+         display: none;
+         }
+         /* Header */
+         .sheet-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 12px 16px;
+         border-bottom: 1px solid var(--border);
+         }
+         /* Content */
+         .sheet-body {
+         flex: 1;
+         overflow-y: auto;
+         padding: 14px 16px;
+         }
+         /* ===== Laptop / PC (Option B) ===== */
+         /* Fullscreen, kein Handle, Close-Button sichtbar */
+         @media (min-width: 768px) {
+         .sheet {
+         inset: 0;
+         border-radius: 0;
+         }
+         .sheet-handle {
+         display: none;
+         }
+         #closeExerciseLogBtn {
+         display: inline-flex;
+         }
+         }
       </style>
    </head>
    <body>
@@ -1022,12 +1078,6 @@
             </div>
          </div>
       </div>
-      <div id="exerciseLogView" class="view">
-         <div class="card">
-            <div class="headline">Exercise Log</div>
-            <ul id="exerciseLogList"></ul>
-         </div>
-      </div>
       <div id="editModal" class="modal">
          <div class="modal-overlay"></div>
          <div class="modal-panel">
@@ -1044,6 +1094,22 @@
             <div class="actions">
                <button id="editSaveButton" class="link-btn accent">Save</button>
             </div>
+         </div>
+      </div>
+      <!-- Exercise Log Sheet -->
+      <div id="exerciseLogSheet" class="sheet" aria-hidden="true">
+         <!-- Swipe Handle -->
+         <div class="sheet-handle"></div>
+         <!-- Header -->
+         <div class="sheet-header">
+            <div class="headline">Exercise Log</div>
+            <button id="closeExerciseLogBtn" class="link-btn muted" type="button">
+            Close
+            </button>
+         </div>
+         <!-- Content -->
+         <div class="sheet-body">
+            <ul id="exerciseLogList"></ul>
          </div>
       </div>
       <!-- Libraries -->
@@ -1071,6 +1137,9 @@
          // ============================
          // DOM Elements
          // ============================
+         
+         const exerciseLogSheet = document.getElementById('exerciseLogSheet');
+         const closeExerciseLogBtn = document.getElementById('closeExerciseLogBtn');
          const menuButton = document.getElementById('menuButton');
          const closeDrawerBtn = document.getElementById('closeDrawerBtn');
          const drawer = document.getElementById('drawer');
@@ -1493,12 +1562,11 @@
          const exerciseLogView = document.getElementById('exerciseLogView');
          
          menuExerciseLog.addEventListener('click', () => {
-         activateTab(null);
-         trainingView.classList.remove('active');
-         progressView.classList.remove('active');
-         setsView.classList.remove('active');
-         exerciseLogView.classList.add('active');
-         closeDrawer();
+         closeDrawer(); // Menü schließen
+         
+         exerciseLogSheet.classList.add('open');
+         exerciseLogSheet.setAttribute('aria-hidden', 'false');
+         
          renderExerciseLog();
          });
          
@@ -1553,6 +1621,11 @@
          const editModalOverlay = editModal.querySelector('.modal-overlay');
          const editModalCloseBtn = editModal.querySelector('.modal-close');
          
+         
+         // Exercise Log Sheet – Close button
+         closeExerciseLogBtn.addEventListener('click', closeExerciseLogSheet);
+         
+         
          function closeCreateModal() {
              createModal.classList.remove('open');
              createModal.setAttribute('aria-hidden', 'true');
@@ -1561,6 +1634,14 @@
          createModalOverlay.addEventListener('click', closeCreateModal);
          createModalClose.addEventListener('click', closeCreateModal);
          createCancelButton.addEventListener('click', closeCreateModal);
+         
+         function closeExerciseLogSheet() {
+         exerciseLogSheet.classList.remove('open');
+         exerciseLogSheet.setAttribute('aria-hidden', 'true');
+         
+         // Menü danach wieder anzeigen
+         openDrawer();
+         }
          
          // ============================
          // Range Filter Events
@@ -2010,7 +2091,7 @@
          document.getElementById('editModal').classList.add('open');
          });
          });
-         
+         }
          function closeEditModal() {
          editWorkoutId = null;
          editModal.classList.remove('open');
@@ -3112,6 +3193,31 @@
          // ============================
          fabCreate.addEventListener('click', () => openCreateModal());
          fabAccount.addEventListener('click', () => openDrawer());
+         // ============================
+         // Exercise Log Sheet – Swipe down to close (Mobile)
+         // ============================
+         
+         let sheetStartY = null;
+         
+         exerciseLogSheet.addEventListener('touchstart', e => {
+         sheetStartY = e.touches[0].clientY;
+         });
+         
+         exerciseLogSheet.addEventListener('touchmove', e => {
+         if (!sheetStartY) return;
+         
+         const deltaY = e.touches[0].clientY - sheetStartY;
+         
+         // Runterziehen → schließen
+         if (deltaY > 80) {
+         closeExerciseLogSheet();
+         sheetStartY = null;
+         }
+         });
+         
+         exerciseLogSheet.addEventListener('touchend', () => {
+         sheetStartY = null;
+         });
       </script>
    </body>
 </html>
