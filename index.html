@@ -848,6 +848,36 @@
          .exercise-log-arrow:hover {
          color: var(--text);
          }
+         /* ============================
+         Exercise Log – Mobile Layout
+         ============================ */
+         @media (max-width: 640px) {
+         .exercise-log-row {
+         align-items: flex-start;
+         }
+         .exercise-log-content {
+         display: flex;
+         flex-direction: column;
+         gap: 4px;
+         white-space: normal;
+         flex: 1;
+         }
+         .exercise-log-header {
+         display: flex;
+         gap: 10px;
+         flex-wrap: wrap;
+         }
+         .exercise-log-meta {
+         font-size: 13px;
+         color: var(--muted);
+         }
+         .exercise-log-arrow {
+         margin-left: auto;
+         padding-left: 8px;
+         line-height: 1;
+         align-self: center;
+         }
+         }
       </style>
    </head>
    <body>
@@ -1585,10 +1615,11 @@
          }
          
          
+         
          document.getElementById('editCancelButton').addEventListener('click', () => {
-         editWorkoutId = null;
-         document.getElementById('editWorkoutModal').classList.remove('open');
+         returnToExerciseLog();
          });
+         
          
          document.getElementById('editSaveButton').addEventListener('click', async () => {
          if (!editWorkoutId) return;
@@ -1601,9 +1632,7 @@
          });
          
          await refreshWorkoutCache(auth.currentUser.uid);
-         renderExerciseLog();
-         
-         document.getElementById('editWorkoutModal').classList.remove('open');
+         returnToExerciseLog();
          });
          
          document.getElementById('editDeleteButton').addEventListener('click', async () => {
@@ -1611,10 +1640,10 @@
          if (!confirm('Delete this entry?')) return;
          
          await db.collection('workouts').doc(editWorkoutId).delete();
-         await refreshWorkoutCache(auth.currentUser.uid);
          
-         renderExerciseLog();
-         document.getElementById('editWorkoutModal').classList.remove('open');
+         await refreshWorkoutCache(auth.currentUser.uid);
+         returnToExerciseLog();
+         
          });
          
          // ============================
@@ -1744,6 +1773,19 @@
          
          // Menü danach wieder anzeigen
          openDrawer();
+         }
+         
+         function returnToExerciseLog() {
+         // Edit-Modal schließen
+         document.getElementById('editWorkoutModal').classList.remove('open');
+         editWorkoutId = null;
+         
+         // Exercise Log wieder öffnen
+         exerciseLogSheet.classList.add('open');
+         exerciseLogSheet.setAttribute('aria-hidden', 'false');
+         
+         // Liste aktualisieren
+         renderExerciseLog();
          }
          
          // ============================
@@ -2162,7 +2204,13 @@
          meta.className = 'exercise-log-meta';
          meta.textContent = `${item.repetitions} reps × ${item.weight} kg`;
          
-         content.append(date, name, meta);
+         
+         const header = document.createElement('div');
+         header.className = 'exercise-log-header';
+         
+         header.append(date, name);
+         content.append(header, meta);
+         
          
          // Rechts: Pfeil
          const arrow = document.createElement('div');
