@@ -855,12 +855,14 @@
          .exercise-log-row {
          align-items: flex-start;
          }
+         /* 👉 Textblock bewusst nach rechts schieben */
          .exercise-log-content {
          display: flex;
          flex-direction: column;
          gap: 4px;
          white-space: normal;
          flex: 1;
+         margin-left: 14px;   /* 🔥 DAS ist die Verschiebung */
          }
          .exercise-log-header {
          display: flex;
@@ -871,6 +873,7 @@
          font-size: 13px;
          color: var(--muted);
          }
+         /* Pfeil bleibt ganz rechts */
          .exercise-log-arrow {
          margin-left: auto;
          padding-left: 8px;
