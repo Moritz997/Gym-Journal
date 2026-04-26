@@ -881,118 +881,101 @@
          align-self: center;
          }
          }
-/* ============================
-   MOBILE: FLAT LAYOUT
-   ============================ */
-@media (max-width: 640px) {
-
-  /* Allgemein weniger Padding */
-  .content {
-    padding: 12px;
-  }
-
-  /* Cards komplett auflösen */
-  .card {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 0;
-    margin-bottom: 18px;
-  }
-
-  /* Alle Chart-Container flach */
-  .chart-wrap {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    margin: 12px 0 22px 0;
-  }
-
-  /* Canvas etwas Luft geben (optische Trennung) */
-  .chart-wrap canvas {
-    width: 100% !important;
-  }
-
-  /* Exercise List – keine Kästen */
-  .exercise-row {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 10px 0;
-  }
-
-  /* Statt Kasten: feine Linie */
-  .exercise-row:not(:last-child) {
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-
-  /* Menu Items im Drawer */
-  .menu-item {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 12px 0;
-  }
-
-  .menu-item:not(:last-child) {
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-
-  /* Exercise Log Einträge */
-  .exercise-log-row {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 12px 0;
-  }
-
-  .exercise-log-row:not(:last-child) {
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-
-  /* Login Hint flacher */
-  .login-hint {
-    background: rgba(255,255,255,0.03);
-    border: none;
-    border-radius: 12px;
-  }
-
-  /* Sets Meta Line weniger „boxed“ */
-  .sets-meta {
-    border: none;
-    padding: 0;
-  }
-}
-/* ============================
-   PROGRESS: weniger Abstand oberes Diagramm (Mobile)
-   ============================ */
-@media (max-width: 640px) {
-
-  /* Weniger Abstand über dem ersten Diagramm */
-  #progressView .chart-wrap {
-    margin-top: 6px;
-    margin-bottom: 18px;
-  }
-
-  /* Harte Spacer im Progress-Reiter entfernen */
-  #progressView > div > div[style*="height"] {
-    display: none;
-  }
-
-  /* Auswahl-Zeile kompakter */
-  #progressView .chart-row {
-    margin-bottom: 4px;
-  }
-}
-
-  @media (max-width: 640px) {
-    #progressView .chart-row {
-      margin-bottom: 4px;
-    }
-  }
-
+         /* ============================
+         MOBILE: FLAT LAYOUT
+         ============================ */
+         @media (max-width: 640px) {
+         /* Allgemein weniger Padding */
+         .content {
+         padding: 12px;
+         }
+         /* Cards komplett auflösen */
+         .card {
+         background: transparent;
+         border: none;
+         border-radius: 0;
+         box-shadow: none;
+         padding: 0;
+         margin-bottom: 18px;
+         }
+         /* Alle Chart-Container flach */
+         .chart-wrap {
+         background: transparent;
+         border: none;
+         border-radius: 0;
+         padding: 0;
+         margin: 12px 0 22px 0;
+         }
+         /* Canvas etwas Luft geben (optische Trennung) */
+         .chart-wrap canvas {
+         width: 100% !important;
+         }
+         /* Exercise List – keine Kästen */
+         .exercise-row {
+         background: transparent;
+         border: none;
+         border-radius: 0;
+         padding: 10px 0;
+         }
+         /* Statt Kasten: feine Linie */
+         .exercise-row:not(:last-child) {
+         border-bottom: 1px solid rgba(255,255,255,0.08);
+         }
+         /* Menu Items im Drawer */
+         .menu-item {
+         background: transparent;
+         border: none;
+         border-radius: 0;
+         padding: 12px 0;
+         }
+         .menu-item:not(:last-child) {
+         border-bottom: 1px solid rgba(255,255,255,0.08);
+         }
+         /* Exercise Log Einträge */
+         .exercise-log-row {
+         background: transparent;
+         border: none;
+         border-radius: 0;
+         padding: 12px 0;
+         }
+         .exercise-log-row:not(:last-child) {
+         border-bottom: 1px solid rgba(255,255,255,0.08);
+         }
+         /* Login Hint flacher */
+         .login-hint {
+         background: rgba(255,255,255,0.03);
+         border: none;
+         border-radius: 12px;
+         }
+         /* Sets Meta Line weniger „boxed“ */
+         .sets-meta {
+         border: none;
+         padding: 0;
+         }
+         }
+         /* ============================
+         PROGRESS: weniger Abstand oberes Diagramm (Mobile)
+         ============================ */
+         @media (max-width: 640px) {
+         /* Weniger Abstand über dem ersten Diagramm */
+         #progressView .chart-wrap {
+         margin-top: 0 !important;
+         margin-bottom: 6px;
+         }
+         /* Harte Spacer im Progress-Reiter entfernen */
+         #progressView > div > div[style*="height"] {
+         display: none;
+         }
+         /* Auswahl-Zeile kompakter */
+         #progressView .chart-row {
+         margin-bottom: 4px;
+         }
+         }
+         @media (max-width: 640px) {
+         #progressView .chart-row {
+         margin-bottom: 0;
+         }
+         }
       </style>
    </head>
    <body>
@@ -1065,7 +1048,7 @@
                      <button type="button" class="range-btn" data-range="year">Year</button>
                      <button type="button" class="range-btn active" data-range="max">Max</button>
                   </div>
-                  <div class="chart-wrap" style="margin-top: 14px;">
+                  <div class="chart-wrap">
                      <div class="chart-row">
                         <label for="progressExerciseSelect" style="margin:0; min-width: 220px;">Exercise</label>
                         <select id="progressExerciseSelect"></select>
@@ -1759,12 +1742,12 @@
          returnToExerciseLog();
          
          });
-
-
-function isMobileView() {
-  return window.innerWidth <= 640;
-}
-
+         
+         
+         function isMobileView() {
+         return window.innerWidth <= 640;
+         }
+         let lastHapticIndex = null;
          
          // ============================
          // Drawer + Tabs
@@ -2432,37 +2415,58 @@ function isMobileView() {
                      datasets: [{
                          label: 'Total IV',
                          data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
                      }]
                  },
                  options: {
                      responsive: true,
          maintainAspectRatio: false,
-                     interaction: { mode: 'index', intersect: false },
-
-scales: {
-  y: {
-    beginAtZero: true,
-    display: !isMobileView(),
-    ticks: { display: !isMobileView() },
-    grid: { display: !isMobileView() }
-  },
-  x: {
-    display: !isMobileView(),
-    ticks: { display: !isMobileView() },
-    grid: { display: !isMobileView() }
-  }
-
+                     interaction: { mode: 'index', intersect: false,axis: 'x'
+         },
+         
+         onHover: (event, elements) => {
+         if (!isMobileView()) return;
+         if (!elements || !elements.length) return;
+         
+         const idx = elements[0].index;
+         
+         // Nur vibrieren, wenn sich der Punkt ändert
+         if (idx !== lastHapticIndex) {
+         lastHapticIndex = idx;
+         
+         if (navigator.vibrate) {
+         navigator.vibrate(8); // ✅ sehr subtil
+         }
+         }
+         },
+         
+         scales: {
+         y: {
+         beginAtZero: true,
+         display: !isMobileView(),
+         ticks: { display: !isMobileView() },
+         grid: { display: !isMobileView() }
+         },
+         x: {
+         display: !isMobileView(),
+         ticks: { display: !isMobileView() },
+         grid: { display: !isMobileView() }
+         }
+         
                      },
                      plugins: {
                          title: { display: true, text: 'Overall Training Performance', color: 'rgba(255,255,255,0.85)' },
@@ -2677,37 +2681,60 @@ scales: {
                              datasets: [{
                                  label: `IV per Training Day – ${displayName}`,
                                  data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
                              }]
                          },
                          options: {
                              responsive: true,
                              maintainAspectRatio: false,
-               interaction: { mode: 'index', intersect: false },
-
-scales: {
-  y: {
-    beginAtZero: true,
-    display: !isMobileView(),
-    ticks: { display: !isMobileView() },
-    grid: { display: !isMobileView() }
-  },
-  x: {
-    display: !isMobileView(),
-    ticks: { display: !isMobileView() },
-    grid: { display: !isMobileView() }
-  }
-
+               interaction: { mode: 'index', intersect: false
+         ,
+         axis: 'x'
+         },
+         
+         onHover: (event, elements) => {
+         if (!isMobileView()) return;
+         if (!elements || !elements.length) return;
+         
+         const idx = elements[0].index;
+         
+         // Nur vibrieren, wenn sich der Punkt ändert
+         if (idx !== lastHapticIndex) {
+         lastHapticIndex = idx;
+         
+         if (navigator.vibrate) {
+         navigator.vibrate(8); // ✅ sehr subtil
+         }
+         }
+         },
+         
+         scales: {
+         y: {
+         beginAtZero: true,
+         display: !isMobileView(),
+         ticks: { display: !isMobileView() },
+         grid: { display: !isMobileView() }
+         },
+         x: {
+         display: !isMobileView(),
+         ticks: { display: !isMobileView() },
+         grid: { display: !isMobileView() }
+         }
+         
                              },
                              plugins: {
                                  title: { display: true, text: `IV per Training Day – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
@@ -2732,37 +2759,60 @@ scales: {
                              datasets: [{
                                  label: `e1RM (Daily MAX) – ${displayName}`,
                                  data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
                              }]
                          },
                          options: {
                              responsive: true,
          maintainAspectRatio: false,
-                             interaction: { mode: 'index', intersect: false },
-
-scales: {
-  y: {
-    beginAtZero: true,
-    display: !isMobileView(),
-    ticks: { display: !isMobileView() },
-    grid: { display: !isMobileView() }
-  },
-  x: {
-    display: !isMobileView(),
-    ticks: { display: !isMobileView() },
-    grid: { display: !isMobileView() }
-  }
-
+                             interaction: { mode: 'index', intersect: false
+         ,
+         axis: 'x'
+         },
+         
+         onHover: (event, elements) => {
+         if (!isMobileView()) return;
+         if (!elements || !elements.length) return;
+         
+         const idx = elements[0].index;
+         
+         // Nur vibrieren, wenn sich der Punkt ändert
+         if (idx !== lastHapticIndex) {
+         lastHapticIndex = idx;
+         
+         if (navigator.vibrate) {
+         navigator.vibrate(8); // ✅ sehr subtil
+         }
+         }
+         },
+         
+         scales: {
+         y: {
+         beginAtZero: true,
+         display: !isMobileView(),
+         ticks: { display: !isMobileView() },
+         grid: { display: !isMobileView() }
+         },
+         x: {
+         display: !isMobileView(),
+         ticks: { display: !isMobileView() },
+         grid: { display: !isMobileView() }
+         }
+         
                              },
                              plugins: {
                                  title: { display: true, text: `e1RM (Daily MAX) – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
@@ -2787,37 +2837,60 @@ scales: {
                              datasets: [{
                                  label: `Max Weight (Daily MAX) – ${displayName}`,
                                  data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
                              }]
                          },
                          options: {
                              responsive: true,
            maintainAspectRatio: false,
-                             interaction: { mode: 'index', intersect: false },
-
-scales: {
-  y: {
-    beginAtZero: true,
-    display: !isMobileView(),
-    ticks: { display: !isMobileView() },
-    grid: { display: !isMobileView() }
-  },
-  x: {
-    display: !isMobileView(),
-    ticks: { display: !isMobileView() },
-    grid: { display: !isMobileView() }
-  }
-
+                             interaction: { mode: 'index', intersect: false
+         ,
+         axis: 'x'
+         },
+         
+         onHover: (event, elements) => {
+         if (!isMobileView()) return;
+         if (!elements || !elements.length) return;
+         
+         const idx = elements[0].index;
+         
+         // Nur vibrieren, wenn sich der Punkt ändert
+         if (idx !== lastHapticIndex) {
+         lastHapticIndex = idx;
+         
+         if (navigator.vibrate) {
+         navigator.vibrate(8); // ✅ sehr subtil
+         }
+         }
+         },
+         
+         scales: {
+         y: {
+         beginAtZero: true,
+         display: !isMobileView(),
+         ticks: { display: !isMobileView() },
+         grid: { display: !isMobileView() }
+         },
+         x: {
+         display: !isMobileView(),
+         ticks: { display: !isMobileView() },
+         grid: { display: !isMobileView() }
+         }
+         
                              },
                              plugins: {
                                  title: { display: true, text: `Max Weight (Daily MAX) – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
@@ -2842,37 +2915,60 @@ scales: {
                              datasets: [{
                                  label: `Volume (Daily SUM) – ${displayName}`,
                                  data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
                              }]
                          },
                          options: {
                              responsive: true,
          maintainAspectRatio: false,
-                             interaction: { mode: 'index', intersect: false },
-
-scales: {
-  y: {
-    beginAtZero: true,
-    display: !isMobileView(),
-    ticks: { display: !isMobileView() },
-    grid: { display: !isMobileView() }
-  },
-  x: {
-    display: !isMobileView(),
-    ticks: { display: !isMobileView() },
-    grid: { display: !isMobileView() }
-  }
-
+                             interaction: { mode: 'index', intersect: false
+         ,
+         axis: 'x'
+         },
+         
+         onHover: (event, elements) => {
+         if (!isMobileView()) return;
+         if (!elements || !elements.length) return;
+         
+         const idx = elements[0].index;
+         
+         // Nur vibrieren, wenn sich der Punkt ändert
+         if (idx !== lastHapticIndex) {
+         lastHapticIndex = idx;
+         
+         if (navigator.vibrate) {
+         navigator.vibrate(8); // ✅ sehr subtil
+         }
+         }
+         },
+         
+         scales: {
+         y: {
+         beginAtZero: true,
+         display: !isMobileView(),
+         ticks: { display: !isMobileView() },
+         grid: { display: !isMobileView() }
+         },
+         x: {
+         display: !isMobileView(),
+         ticks: { display: !isMobileView() },
+         grid: { display: !isMobileView() }
+         }
+         
                              },
                              plugins: {
                                  title: { display: true, text: `Training Volume (Daily SUM) – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
@@ -2896,17 +2992,21 @@ scales: {
          labels,
          datasets: [{
          data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
          }]
          },
          options: baseChartOptions(`Weight per Day – ${displayName}`, 'kg', true)
@@ -2925,17 +3025,21 @@ scales: {
          labels,
          datasets: [{
          data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
          }]
          },
          options: baseChartOptions(`Repetitions per Day – ${displayName}`, 'Reps', true)
@@ -3033,59 +3137,78 @@ scales: {
              };
          }
          
-function baseChartOptions(titleText, yTitle, beginAtZero) {
-  const mobile = isMobileView();
-
-  return {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: { mode: 'index', intersect: false },
-
-    scales: {
-      y: {
-        beginAtZero: beginAtZero,
-        display: !mobile,
-        ticks: {
+         function baseChartOptions(titleText, yTitle, beginAtZero) {
+         const mobile = isMobileView();
+         
+         return {
+         responsive: true,
+         maintainAspectRatio: false,
+         interaction: { mode: 'index', intersect: false
+         ,
+         axis: 'x'
+         },
+         
+         onHover: (event, elements) => {
+         if (!isMobileView()) return;
+         if (!elements || !elements.length) return;
+         
+         const idx = elements[0].index;
+         
+         // Nur vibrieren, wenn sich der Punkt ändert
+         if (idx !== lastHapticIndex) {
+         lastHapticIndex = idx;
+         
+         if (navigator.vibrate) {
+         navigator.vibrate(8); // ✅ sehr subtil
+         }
+         }
+         },
+         
+         scales: {
+         y: {
+         beginAtZero: beginAtZero,
+         display: !mobile,
+         ticks: {
           display: !mobile,
-        },
-        grid: {
+         },
+         grid: {
           display: !mobile
-        },
-        title: {
+         },
+         title: {
           display: !mobile,
           text: yTitle,
           color: 'rgba(255,255,255,0.7)'
-        }
-      },
-      x: {
-        display: !mobile,
-        ticks: {
+         }
+         },
+         x: {
+         display: !mobile,
+         ticks: {
           display: !mobile
-        },
-        grid: {
+         },
+         grid: {
           display: !mobile
-        },
-        title: {
+         },
+         title: {
           display: false
-        }
-      }
-    },
-
-    plugins: {
-      title: {
-        display: !mobile,
-        text: titleText,
-        color: 'rgba(255,255,255,0.85)'
-      },
-      legend: {
-        display: false
-      },
-      tooltip: {
-        enabled: true
-      }
-    }
-  };
-}
+         }
+         }
+         },
+         
+         plugins: {
+         title: {
+         display: !mobile,
+         text: titleText,
+         color: 'rgba(255,255,255,0.85)'
+         },
+         legend: {
+         display: false
+         },
+         tooltip: {
+         enabled: true
+         }
+         }
+         };
+         }
          
          async function renderSetsChartsForExercise(exerciseKey, dayKey = null, forceLatest = false) {
              const currentUser = auth.currentUser;
@@ -3150,17 +3273,21 @@ function baseChartOptions(titleText, yTitle, beginAtZero) {
                              labels,
                              datasets: [{
                                  data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
                              }]
                          },
                          options
@@ -3179,17 +3306,21 @@ function baseChartOptions(titleText, yTitle, beginAtZero) {
                              labels,
                              datasets: [{
                                  data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
                              }]
                          },
                          options
@@ -3208,17 +3339,21 @@ function baseChartOptions(titleText, yTitle, beginAtZero) {
                              labels,
                              datasets: [{
                                  data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
                              }]
                          },
                          options
@@ -3237,17 +3372,21 @@ function baseChartOptions(titleText, yTitle, beginAtZero) {
                              labels,
                              datasets: [{
                                  data: dataPoints,
-
-  borderColor: 'rgba(255,255,255,0.85)',
-  backgroundColor: 'rgba(255,255,255,0.08)',
-
-  fill: true,
-  tension: 0.25,
-
-  pointRadius: isMobileView() ? 0 : 3,
-  pointHoverRadius: isMobileView() ? 0 : 6,
-  borderWidth: isMobileView() ? 2 : 3
-
+         
+         borderColor: 'rgba(255,255,255,0.85)',
+         backgroundColor: 'rgba(255,255,255,0.08)',
+         
+         fill: true,
+         tension: 0.25,
+         
+         
+         pointRadius: 0,                    // 👈 Standard: kein Punkt
+         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointBackgroundColor: '#ffffff',
+         pointBorderColor: '#000000',
+         borderWidth: isMobileView() ? 2 : 3
+         
+         
                              }]
                          },
                          options
