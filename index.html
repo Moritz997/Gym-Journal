@@ -976,38 +976,47 @@
          margin-bottom: 0;
          }
          }
-/* ============================
-   CHART HEADER (Title + Description)
-   ============================ */
-.chart-header {
-  margin-bottom: 10px;
-}
-
-.chart-title {
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  color: var(--text);
-}
-
-.chart-desc {
-  margin-top: 2px;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.3;
-}
-
-/* Mehr Abstand zwischen Diagrammen */
-.chart-wrap {
-  margin-bottom: 32px;
-}
-
-/* Mobile etwas luftiger */
-@media (max-width: 640px) {
-  .chart-wrap {
-    margin-bottom: 38px;
-  }
-}
+         /* ============================
+         CHART HEADER – sauberer Abstand
+         ============================ */
+         .chart-wrap {
+         margin-bottom: 36px;          /* mehr Abstand zwischen Charts */
+         }
+         .chart-header {
+         margin-bottom: 14px;          /* Abstand ZWISCHEN Titel und Chart */
+         }
+         .chart-title {
+         font-size: 14px;
+         font-weight: 700;
+         line-height: 1.25;
+         }
+         .chart-desc {
+         margin-top: 4px;
+         font-size: 12px;
+         line-height: 1.35;
+         color: var(--muted);
+         }
+         /* Canvas niemals über Header legen */
+         .chart-wrap canvas {
+         display: block;
+         }
+         /* Mobile: noch etwas luftiger */
+         @media (max-width: 640px) {
+         .chart-wrap {
+         margin-bottom: 42px;
+         }
+         .chart-header {
+         margin-bottom: 16px;
+         }
+         }
+         /* ============================
+         PROGRESS: kein Abstand vor erstem Chart
+         ============================ */
+         @media (max-width: 640px) {
+         #progressView .chart-wrap:first-of-type {
+         margin-top: 0 !important;
+         }
+         }
       </style>
    </head>
    <body>
@@ -1045,14 +1054,13 @@
                      <button type="button" class="range-btn" data-range="year">Year</button>
                      <button type="button" class="range-btn active" data-range="max">Max</button>
                   </div>
-
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Overall Training Performance</div>
-    <div class="chart-desc">
-      Total Training Volume and Performance.
-    </div>
-  </div>
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Overall Training Performance</div>
+                        <div class="chart-desc">
+                           Total Training Volume and Performance.
+                        </div>
+                     </div>
                      <canvas id="overallChart"></canvas>
                   </div>
                   <div class="exercises-header">
@@ -1094,69 +1102,65 @@
                         <button id="showProgressChartsButton" class="link-btn accent" type="button">Show</button>
                      </div>
                   </div>
-
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Intensity Volume</div>
-    <div class="chart-desc">
-      Total training volume per day, weighted by intensity.
-    </div>
-  </div>
-  <canvas id="ivPerDayChart"></canvas>
-</div>
-
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Intensity Volume</div>
+                        <div class="chart-desc">
+                           Total training volume per day, weighted by intensity.
+                        </div>
+                     </div>
+                     <canvas id="ivPerDayChart"></canvas>
+                  </div>
                   <div style="height: 14px;"></div>
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Estimated 1RM</div>
-    <div class="chart-desc">
-      Highest estimated one‑rep max achieved per training day.
-    </div>
-  </div>
-  <canvas id="e1rmPerDayChart"></canvas>
-</div>
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Estimated 1RM</div>
+                        <div class="chart-desc">
+                           Highest estimated one‑rep max achieved per training day.
+                        </div>
+                     </div>
+                     <canvas id="e1rmPerDayChart"></canvas>
+                  </div>
                   <div style="height: 14px;"></div>
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Max Weight</div>
-    <div class="chart-desc">
-      Highest weight lifted on each training day.
-    </div>
-  </div>
-  <canvas id="maxWeightPerDayChart"></canvas>
-</div>
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Max Weight</div>
+                        <div class="chart-desc">
+                           Highest weight lifted on each training day.
+                        </div>
+                     </div>
+                     <canvas id="maxWeightPerDayChart"></canvas>
+                  </div>
                   <div style="height: 14px;"></div>
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Training Volume</div>
-    <div class="chart-desc">
-      Total volume per day calculated as weight multiplied by repetitions.
-    </div>
-  </div>
-  <canvas id="volumePerDayChart"></canvas>
-</div>
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Training Volume</div>
+                        <div class="chart-desc">
+                           Total volume per day calculated as weight multiplied by repetitions.
+                        </div>
+                     </div>
+                     <canvas id="volumePerDayChart"></canvas>
+                  </div>
                   <div style="height: 14px;"></div>
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Weight</div>
-    <div class="chart-desc">
-      Maximum weight used across all sets per training day.
-    </div>
-  </div>
-  <canvas id="weightPerDayChart"></canvas>
-</div>
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Weight</div>
+                        <div class="chart-desc">
+                           Maximum weight used across all sets per training day.
+                        </div>
+                     </div>
+                     <canvas id="weightPerDayChart"></canvas>
+                  </div>
                   <div style="height: 14px;"></div>
-
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Repetitions</div>
-    <div class="chart-desc">
-      Total number of repetitions performed per training day.
-    </div>
-  </div>
-  <canvas id="repsPerDayChart"></canvas>
-</div>
-
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Repetitions</div>
+                        <div class="chart-desc">
+                           Total number of repetitions performed per training day.
+                        </div>
+                     </div>
+                     <canvas id="repsPerDayChart"></canvas>
+                  </div>
                </div>
             </div>
             <!-- SETS VIEW -->
@@ -1192,57 +1196,55 @@
                      <span>Latest day: <b id="setsLatestDayLabel">—</b></span>
                   </div>
                   <div style="height: 14px;"></div>
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Intensity Volume per Set</div>
-    <div class="chart-desc">
-      Intensity‑adjusted training volume for each individual set.
-    </div>
-  </div>
-  <canvas id="ivPerSetChart"></canvas>
-</div>
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Intensity Volume per Set</div>
+                        <div class="chart-desc">
+                           Intensity‑adjusted training volume for each individual set.
+                        </div>
+                     </div>
+                     <canvas id="ivPerSetChart"></canvas>
+                  </div>
                   <div style="height: 14px;"></div>
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Estimated 1RM per Set</div>
-    <div class="chart-desc">
-      Estimated one‑rep max calculated for each set.
-    </div>
-  </div>
-  <canvas id="e1rmPerSetChart"></canvas>
-</div>
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Estimated 1RM per Set</div>
+                        <div class="chart-desc">
+                           Estimated one‑rep max calculated for each set.
+                        </div>
+                     </div>
+                     <canvas id="e1rmPerSetChart"></canvas>
+                  </div>
                   <div style="height: 14px;"></div>
-
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Weight per Set</div>
-    <div class="chart-desc">
-      Weight used in each individual set on the selected day.
-    </div>
-  </div>
-  <canvas id="maxWeightPerSetChart"></canvas>
-</div>
-
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Weight per Set</div>
+                        <div class="chart-desc">
+                           Weight used in each individual set on the selected day.
+                        </div>
+                     </div>
+                     <canvas id="maxWeightPerSetChart"></canvas>
+                  </div>
                   <div style="height: 14px;"></div>
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Volume per Set</div>
-    <div class="chart-desc">
-      Training volume per set calculated as weight multiplied by repetitions.
-    </div>
-  </div>
-  <canvas id="volumePerSetChart"></canvas>
-</div>
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Volume per Set</div>
+                        <div class="chart-desc">
+                           Training volume per set calculated as weight multiplied by repetitions.
+                        </div>
+                     </div>
+                     <canvas id="volumePerSetChart"></canvas>
+                  </div>
                   <div style="height: 14px;"></div>
-<div class="chart-wrap">
-  <div class="chart-header">
-    <div class="chart-title">Repetitions per Set</div>
-    <div class="chart-desc">
-      Number of repetitions completed in each set.
-    </div>
-  </div>
-  <canvas id="repsPerSetChart"></canvas>
-</div>
+                  <div class="chart-wrap">
+                     <div class="chart-header">
+                        <div class="chart-title">Repetitions per Set</div>
+                        <div class="chart-desc">
+                           Number of repetitions completed in each set.
+                        </div>
+                     </div>
+                     <canvas id="repsPerSetChart"></canvas>
+                  </div>
                </div>
             </div>
          </div>
@@ -1835,7 +1837,14 @@
          function isMobileView() {
          return window.innerWidth <= 640;
          }
+         
          let lastHapticIndex = null;
+         
+         function vibrateTick() {
+         if (!isMobileView()) return;
+         if (navigator.vibrate) navigator.vibrate(8); // sehr subtil
+         }
+         
          
          // ============================
          // Drawer + Tabs
@@ -2511,11 +2520,17 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
+         
          
          
                      }]
@@ -2526,21 +2541,25 @@
                      interaction: { mode: 'index', intersect: false,axis: 'x'
          },
          
-         onHover: (event, elements) => {
+         
+         elements: {
+         point: {
+         radius: (ctx) => ctx.active ? 4 : 0
+         }
+         },
+         
+         onHover: (event, elements, chart) => {
          if (!isMobileView()) return;
          if (!elements || !elements.length) return;
          
          const idx = elements[0].index;
          
-         // Nur vibrieren, wenn sich der Punkt ändert
          if (idx !== lastHapticIndex) {
          lastHapticIndex = idx;
-         
-         if (navigator.vibrate) {
-         navigator.vibrate(8); // ✅ sehr subtil
-         }
+         vibrateTick();
          }
          },
+         
          
          scales: {
          y: {
@@ -2777,11 +2796,17 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
+         
          
          
                              }]
@@ -2794,21 +2819,25 @@
          axis: 'x'
          },
          
-         onHover: (event, elements) => {
+         
+         elements: {
+         point: {
+         radius: (ctx) => ctx.active ? 4 : 0
+         }
+         },
+         
+         onHover: (event, elements, chart) => {
          if (!isMobileView()) return;
          if (!elements || !elements.length) return;
          
          const idx = elements[0].index;
          
-         // Nur vibrieren, wenn sich der Punkt ändert
          if (idx !== lastHapticIndex) {
          lastHapticIndex = idx;
-         
-         if (navigator.vibrate) {
-         navigator.vibrate(8); // ✅ sehr subtil
-         }
+         vibrateTick();
          }
          },
+         
          
          scales: {
          y: {
@@ -2855,11 +2884,17 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
+         
          
          
                              }]
@@ -2872,21 +2907,25 @@
          axis: 'x'
          },
          
-         onHover: (event, elements) => {
+         
+         elements: {
+         point: {
+         radius: (ctx) => ctx.active ? 4 : 0
+         }
+         },
+         
+         onHover: (event, elements, chart) => {
          if (!isMobileView()) return;
          if (!elements || !elements.length) return;
          
          const idx = elements[0].index;
          
-         // Nur vibrieren, wenn sich der Punkt ändert
          if (idx !== lastHapticIndex) {
          lastHapticIndex = idx;
-         
-         if (navigator.vibrate) {
-         navigator.vibrate(8); // ✅ sehr subtil
-         }
+         vibrateTick();
          }
          },
+         
          
          scales: {
          y: {
@@ -2933,11 +2972,17 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
+         
          
          
                              }]
@@ -2950,21 +2995,24 @@
          axis: 'x'
          },
          
-         onHover: (event, elements) => {
+         
+         elements: {
+         point: {
+         radius: (ctx) => ctx.active ? 4 : 0
+         }
+         },
+         onHover: (event, elements, chart) => {
          if (!isMobileView()) return;
          if (!elements || !elements.length) return;
          
          const idx = elements[0].index;
          
-         // Nur vibrieren, wenn sich der Punkt ändert
          if (idx !== lastHapticIndex) {
          lastHapticIndex = idx;
-         
-         if (navigator.vibrate) {
-         navigator.vibrate(8); // ✅ sehr subtil
-         }
+         vibrateTick();
          }
          },
+         
          
          scales: {
          y: {
@@ -3011,11 +3059,16 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
+         
          
          
                              }]
@@ -3028,21 +3081,25 @@
          axis: 'x'
          },
          
-         onHover: (event, elements) => {
+         
+         elements: {
+         point: {
+         radius: (ctx) => ctx.active ? 4 : 0
+         }
+         },
+         
+         onHover: (event, elements, chart) => {
          if (!isMobileView()) return;
          if (!elements || !elements.length) return;
          
          const idx = elements[0].index;
          
-         // Nur vibrieren, wenn sich der Punkt ändert
          if (idx !== lastHapticIndex) {
          lastHapticIndex = idx;
-         
-         if (navigator.vibrate) {
-         navigator.vibrate(8); // ✅ sehr subtil
-         }
+         vibrateTick();
          }
          },
+         
          
          scales: {
          y: {
@@ -3088,11 +3145,17 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
+         
          
          
          }]
@@ -3121,11 +3184,17 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
+         
          
          
          }]
@@ -3236,21 +3305,25 @@
          axis: 'x'
          },
          
-         onHover: (event, elements) => {
+         
+         elements: {
+         point: {
+         radius: (ctx) => ctx.active ? 4 : 0
+         }
+         },
+         
+         onHover: (event, elements, chart) => {
          if (!isMobileView()) return;
          if (!elements || !elements.length) return;
          
          const idx = elements[0].index;
          
-         // Nur vibrieren, wenn sich der Punkt ändert
          if (idx !== lastHapticIndex) {
          lastHapticIndex = idx;
-         
-         if (navigator.vibrate) {
-         navigator.vibrate(8); // ✅ sehr subtil
-         }
+         vibrateTick();
          }
          },
+         
          
          scales: {
          y: {
@@ -3367,11 +3440,17 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
+         
          
          
                              }]
@@ -3400,11 +3479,17 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
+         
          
          
                              }]
@@ -3433,10 +3518,15 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
          
          
@@ -3466,11 +3556,17 @@
          tension: 0.25,
          
          
-         pointRadius: 0,                    // 👈 Standard: kein Punkt
-         pointHoverRadius: isMobileView() ? 4 : 6,
+         
+         pointRadius: 0,                       // kein Punkt im Ruhezustand
+         pointHoverRadius: 0,                 // Hover ignorieren (wichtig!)
+         pointHitRadius: 16,                  // große Touch-Fläche
+         
+         pointBorderWidth: 2,
          pointBackgroundColor: '#ffffff',
          pointBorderColor: '#000000',
+         
          borderWidth: isMobileView() ? 2 : 3
+         
          
          
                              }]
