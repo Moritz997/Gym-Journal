@@ -960,7 +960,7 @@
          /* Weniger Abstand über dem ersten Diagramm */
          #progressView .chart-wrap {
          margin-top: 0 !important;
-         margin-bottom: 6px;
+         margin-bottom: 0;
          }
          /* Harte Spacer im Progress-Reiter entfernen */
          #progressView > div > div[style*="height"] {
@@ -968,7 +968,7 @@
          }
          /* Auswahl-Zeile kompakter */
          #progressView .chart-row {
-         margin-bottom: 4px;
+         margin-bottom: 0;
          }
          }
          @media (max-width: 640px) {
@@ -976,6 +976,38 @@
          margin-bottom: 0;
          }
          }
+/* ============================
+   CHART HEADER (Title + Description)
+   ============================ */
+.chart-header {
+  margin-bottom: 10px;
+}
+
+.chart-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--text);
+}
+
+.chart-desc {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+/* Mehr Abstand zwischen Diagrammen */
+.chart-wrap {
+  margin-bottom: 32px;
+}
+
+/* Mobile etwas luftiger */
+@media (max-width: 640px) {
+  .chart-wrap {
+    margin-bottom: 38px;
+  }
+}
       </style>
    </head>
    <body>
@@ -1013,7 +1045,14 @@
                      <button type="button" class="range-btn" data-range="year">Year</button>
                      <button type="button" class="range-btn active" data-range="max">Max</button>
                   </div>
-                  <div class="chart-wrap">
+
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Overall Training Performance</div>
+    <div class="chart-desc">
+      Total Training Volume and Performance.
+    </div>
+  </div>
                      <canvas id="overallChart"></canvas>
                   </div>
                   <div class="exercises-header">
@@ -1055,41 +1094,69 @@
                         <button id="showProgressChartsButton" class="link-btn accent" type="button">Show</button>
                      </div>
                   </div>
-                  <div class="chart-wrap">
-                     <div class="chart-row">
-                        <label style="margin:0; min-width: 220px;">IV per Training Day (SUM)</label>
-                     </div>
-                     <canvas id="ivPerDayChart"></canvas>
-                  </div>
+
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Intensity Volume</div>
+    <div class="chart-desc">
+      Total training volume per day, weighted by intensity.
+    </div>
+  </div>
+  <canvas id="ivPerDayChart"></canvas>
+</div>
+
                   <div style="height: 14px;"></div>
-                  <div class="chart-wrap">
-                     <div class="chart-row">
-                        <label style="margin:0; min-width: 220px;">e1RM per Training Day (MAX)</label>
-                     </div>
-                     <canvas id="e1rmPerDayChart"></canvas>
-                  </div>
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Estimated 1RM</div>
+    <div class="chart-desc">
+      Highest estimated one‑rep max achieved per training day.
+    </div>
+  </div>
+  <canvas id="e1rmPerDayChart"></canvas>
+</div>
                   <div style="height: 14px;"></div>
-                  <div class="chart-wrap">
-                     <div class="chart-row">
-                        <label style="margin:0; min-width: 220px;">Max Weight per Training Day (MAX)</label>
-                     </div>
-                     <canvas id="maxWeightPerDayChart"></canvas>
-                  </div>
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Max Weight</div>
+    <div class="chart-desc">
+      Highest weight lifted on each training day.
+    </div>
+  </div>
+  <canvas id="maxWeightPerDayChart"></canvas>
+</div>
                   <div style="height: 14px;"></div>
-                  <div class="chart-wrap">
-                     <div class="chart-row">
-                        <label style="margin:0; min-width: 220px;">Training Volume per Training Day (SUM weight × reps)</label>
-                     </div>
-                     <canvas id="volumePerDayChart"></canvas>
-                  </div>
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Training Volume</div>
+    <div class="chart-desc">
+      Total volume per day calculated as weight multiplied by repetitions.
+    </div>
+  </div>
+  <canvas id="volumePerDayChart"></canvas>
+</div>
                   <div style="height: 14px;"></div>
-                  <div class="chart-wrap">
-                     <canvas id="weightPerDayChart"></canvas>
-                  </div>
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Weight</div>
+    <div class="chart-desc">
+      Maximum weight used across all sets per training day.
+    </div>
+  </div>
+  <canvas id="weightPerDayChart"></canvas>
+</div>
                   <div style="height: 14px;"></div>
-                  <div class="chart-wrap">
-                     <canvas id="repsPerDayChart"></canvas>
-                  </div>
+
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Repetitions</div>
+    <div class="chart-desc">
+      Total number of repetitions performed per training day.
+    </div>
+  </div>
+  <canvas id="repsPerDayChart"></canvas>
+</div>
+
                </div>
             </div>
             <!-- SETS VIEW -->
@@ -1125,36 +1192,57 @@
                      <span>Latest day: <b id="setsLatestDayLabel">—</b></span>
                   </div>
                   <div style="height: 14px;"></div>
-                  <div class="chart-wrap">
-                     <div class="chart-row">
-                        <label style="margin:0; min-width: 220px;">IV per Set</label>
-                     </div>
-                     <canvas id="ivPerSetChart"></canvas>
-                  </div>
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Intensity Volume per Set</div>
+    <div class="chart-desc">
+      Intensity‑adjusted training volume for each individual set.
+    </div>
+  </div>
+  <canvas id="ivPerSetChart"></canvas>
+</div>
                   <div style="height: 14px;"></div>
-                  <div class="chart-wrap">
-                     <div class="chart-row">
-                        <label style="margin:0; min-width: 220px;">e1RM per Set</label>
-                     </div>
-                     <canvas id="e1rmPerSetChart"></canvas>
-                  </div>
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Estimated 1RM per Set</div>
+    <div class="chart-desc">
+      Estimated one‑rep max calculated for each set.
+    </div>
+  </div>
+  <canvas id="e1rmPerSetChart"></canvas>
+</div>
                   <div style="height: 14px;"></div>
-                  <div class="chart-wrap">
-                     <div class="chart-row">
-                        <label style="margin:0; min-width: 220px;">Weight per Set</label>
-                     </div>
-                     <canvas id="maxWeightPerSetChart"></canvas>
-                  </div>
+
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Weight per Set</div>
+    <div class="chart-desc">
+      Weight used in each individual set on the selected day.
+    </div>
+  </div>
+  <canvas id="maxWeightPerSetChart"></canvas>
+</div>
+
                   <div style="height: 14px;"></div>
-                  <div class="chart-wrap">
-                     <div class="chart-row">
-                        <label style="margin:0; min-width: 220px;">Volume per Set (weight × reps)</label>
-                     </div>
-                     <canvas id="volumePerSetChart"></canvas>
-                  </div>
-                  <div class="chart-wrap">
-                     <canvas id="repsPerSetChart"></canvas>
-                  </div>
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Volume per Set</div>
+    <div class="chart-desc">
+      Training volume per set calculated as weight multiplied by repetitions.
+    </div>
+  </div>
+  <canvas id="volumePerSetChart"></canvas>
+</div>
+                  <div style="height: 14px;"></div>
+<div class="chart-wrap">
+  <div class="chart-header">
+    <div class="chart-title">Repetitions per Set</div>
+    <div class="chart-desc">
+      Number of repetitions completed in each set.
+    </div>
+  </div>
+  <canvas id="repsPerSetChart"></canvas>
+</div>
                </div>
             </div>
          </div>
@@ -2469,7 +2557,7 @@
          
                      },
                      plugins: {
-                         title: { display: true, text: 'Overall Training Performance', color: 'rgba(255,255,255,0.85)' },
+                         title: { display: false },
                          legend: { display: false }
                      }
                  }
@@ -2737,7 +2825,7 @@
          
                              },
                              plugins: {
-                                 title: { display: true, text: `IV per Training Day – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
+                                 title: { display: false },
                                  legend: { display: false }
                              }
                          }
@@ -2815,7 +2903,7 @@
          
                              },
                              plugins: {
-                                 title: { display: true, text: `e1RM (Daily MAX) – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
+                                 title: { display: false },
                                  legend: { display: false }
                              }
                          }
@@ -2893,7 +2981,7 @@
          
                              },
                              plugins: {
-                                 title: { display: true, text: `Max Weight (Daily MAX) – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
+                                 title: { display: false },
                                  legend: { display: false }
                              }
                          }
@@ -2971,7 +3059,7 @@
          
                              },
                              plugins: {
-                                 title: { display: true, text: `Training Volume (Daily SUM) – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
+                                 title: { display: false },
                                  legend: { display: false }
                              }
                          }
@@ -3196,9 +3284,7 @@
          
          plugins: {
          title: {
-         display: !mobile,
-         text: titleText,
-         color: 'rgba(255,255,255,0.85)'
+         display: false
          },
          legend: {
          display: false
