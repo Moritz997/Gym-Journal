@@ -965,6 +965,34 @@
     padding: 0;
   }
 }
+/* ============================
+   PROGRESS: weniger Abstand oberes Diagramm (Mobile)
+   ============================ */
+@media (max-width: 640px) {
+
+  /* Weniger Abstand über dem ersten Diagramm */
+  #progressView .chart-wrap {
+    margin-top: 6px;
+    margin-bottom: 18px;
+  }
+
+  /* Harte Spacer im Progress-Reiter entfernen */
+  #progressView > div > div[style*="height"] {
+    display: none;
+  }
+
+  /* Auswahl-Zeile kompakter */
+  #progressView .chart-row {
+    margin-bottom: 4px;
+  }
+}
+
+  @media (max-width: 640px) {
+    #progressView .chart-row {
+      margin-bottom: 4px;
+    }
+  }
+
       </style>
    </head>
    <body>
@@ -1044,7 +1072,6 @@
                         <button id="showProgressChartsButton" class="link-btn accent" type="button">Show</button>
                      </div>
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
                      <div class="chart-row">
                         <label style="margin:0; min-width: 220px;">IV per Training Day (SUM)</label>
@@ -1732,6 +1759,12 @@
          returnToExerciseLog();
          
          });
+
+
+function isMobileView() {
+  return window.innerWidth <= 640;
+}
+
          
          // ============================
          // Drawer + Tabs
@@ -2399,31 +2432,37 @@
                      datasets: [{
                          label: 'Total IV',
                          data: dataPoints,
-                         borderColor: 'rgba(255,255,255,0.85)',
-                         backgroundColor: 'rgba(255,255,255,0.10)',
-                         borderWidth: 2,
-                         fill: false,
-                         tension: 0.2,
-                         pointRadius: 2,
-                         pointHoverRadius: 6
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
                      }]
                  },
                  options: {
                      responsive: true,
          maintainAspectRatio: false,
                      interaction: { mode: 'index', intersect: false },
-                     scales: {
-                         y: {
-                             beginAtZero: true,
-                             title: { display: true, text: 'Intensity Volume (IV)', color: 'rgba(255,255,255,0.7)' },
-                             ticks: { color: 'rgba(255,255,255,0.6)' },
-                             grid: { color: 'rgba(255,255,255,0.06)' }
-                         },
-                         x: {
-                             title: { display: false },
-                             ticks: { display: false },
-                             grid: { color: 'rgba(255,255,255,0.06)' }
-                         }
+
+scales: {
+  y: {
+    beginAtZero: true,
+    display: !isMobileView(),
+    ticks: { display: !isMobileView() },
+    grid: { display: !isMobileView() }
+  },
+  x: {
+    display: !isMobileView(),
+    ticks: { display: !isMobileView() },
+    grid: { display: !isMobileView() }
+  }
+
                      },
                      plugins: {
                          title: { display: true, text: 'Overall Training Performance', color: 'rgba(255,255,255,0.85)' },
@@ -2638,31 +2677,37 @@
                              datasets: [{
                                  label: `IV per Training Day – ${displayName}`,
                                  data: dataPoints,
-                                 borderColor: 'rgba(255, 255, 255, 0.85)',
-                                 backgroundColor: 'rgba(255, 255, 255, 0.10)',
-                                 borderWidth: 2,
-                                 fill: false,
-                                 tension: 0.2,
-                                 pointRadius: 3,
-                                 pointHoverRadius: 6
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
                              }]
                          },
                          options: {
                              responsive: true,
                              maintainAspectRatio: false,
                interaction: { mode: 'index', intersect: false },
-                             scales: {
-                                 y: {
-                                     beginAtZero: true,
-                                     title: { display: true, text: 'Intensity Volume (IV)', color: 'rgba(255,255,255,0.7)' },
-                                     ticks: { color: 'rgba(255,255,255,0.6)' },
-                                     grid: { color: 'rgba(255,255,255,0.06)' }
-                                 },
-                                 x: {
-                                     title: { display: true, text: 'Training Day', color: 'rgba(255,255,255,0.7)' },
-                                     ticks: { autoSkip: true, maxTicksLimit: 12, maxRotation: 0, color: 'rgba(255,255,255,0.6)' },
-                                     grid: { color: 'rgba(255,255,255,0.06)' }
-                                 }
+
+scales: {
+  y: {
+    beginAtZero: true,
+    display: !isMobileView(),
+    ticks: { display: !isMobileView() },
+    grid: { display: !isMobileView() }
+  },
+  x: {
+    display: !isMobileView(),
+    ticks: { display: !isMobileView() },
+    grid: { display: !isMobileView() }
+  }
+
                              },
                              plugins: {
                                  title: { display: true, text: `IV per Training Day – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
@@ -2687,31 +2732,37 @@
                              datasets: [{
                                  label: `e1RM (Daily MAX) – ${displayName}`,
                                  data: dataPoints,
-                                 borderColor: 'rgba(0, 208, 132, 1)',
-                                 backgroundColor: 'rgba(0, 208, 132, 0.12)',
-                                 borderWidth: 2,
-                                 fill: false,
-                                 tension: 0.2,
-                                 pointRadius: 3,
-                                 pointHoverRadius: 6
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
                              }]
                          },
                          options: {
                              responsive: true,
          maintainAspectRatio: false,
                              interaction: { mode: 'index', intersect: false },
-                             scales: {
-                                 y: {
-                                     beginAtZero: true,
-                                     title: { display: true, text: 'e1RM (kg)', color: 'rgba(255,255,255,0.7)' },
-                                     ticks: { color: 'rgba(255,255,255,0.6)' },
-                                     grid: { color: 'rgba(255,255,255,0.06)' }
-                                 },
-                                 x: {
-                                     title: { display: true, text: 'Training Day', color: 'rgba(255,255,255,0.7)' },
-                                     ticks: { autoSkip: true, maxTicksLimit: 12, maxRotation: 0, color: 'rgba(255,255,255,0.6)' },
-                                     grid: { color: 'rgba(255,255,255,0.06)' }
-                                 }
+
+scales: {
+  y: {
+    beginAtZero: true,
+    display: !isMobileView(),
+    ticks: { display: !isMobileView() },
+    grid: { display: !isMobileView() }
+  },
+  x: {
+    display: !isMobileView(),
+    ticks: { display: !isMobileView() },
+    grid: { display: !isMobileView() }
+  }
+
                              },
                              plugins: {
                                  title: { display: true, text: `e1RM (Daily MAX) – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
@@ -2736,31 +2787,37 @@
                              datasets: [{
                                  label: `Max Weight (Daily MAX) – ${displayName}`,
                                  data: dataPoints,
-                                 borderColor: 'rgba(255, 255, 255, 0.85)',
-                                 backgroundColor: 'rgba(255, 255, 255, 0.10)',
-                                 borderWidth: 2,
-                                 fill: false,
-                                 tension: 0.2,
-                                 pointRadius: 3,
-                                 pointHoverRadius: 6
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
                              }]
                          },
                          options: {
                              responsive: true,
            maintainAspectRatio: false,
                              interaction: { mode: 'index', intersect: false },
-                             scales: {
-                                 y: {
-                                     beginAtZero: true,
-                                     title: { display: true, text: 'Weight (kg)', color: 'rgba(255,255,255,0.7)' },
-                                     ticks: { color: 'rgba(255,255,255,0.6)' },
-                                     grid: { color: 'rgba(255,255,255,0.06)' }
-                                 },
-                                 x: {
-                                     title: { display: true, text: 'Training Day', color: 'rgba(255,255,255,0.7)' },
-                                     ticks: { autoSkip: true, maxTicksLimit: 12, maxRotation: 0, color: 'rgba(255,255,255,0.6)' },
-                                     grid: { color: 'rgba(255,255,255,0.06)' }
-                                 }
+
+scales: {
+  y: {
+    beginAtZero: true,
+    display: !isMobileView(),
+    ticks: { display: !isMobileView() },
+    grid: { display: !isMobileView() }
+  },
+  x: {
+    display: !isMobileView(),
+    ticks: { display: !isMobileView() },
+    grid: { display: !isMobileView() }
+  }
+
                              },
                              plugins: {
                                  title: { display: true, text: `Max Weight (Daily MAX) – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
@@ -2785,31 +2842,37 @@
                              datasets: [{
                                  label: `Volume (Daily SUM) – ${displayName}`,
                                  data: dataPoints,
-                                 borderColor: 'rgba(255, 176, 32, 1)',
-                                 backgroundColor: 'rgba(255, 176, 32, 0.10)',
-                                 borderWidth: 2,
-                                 fill: false,
-                                 tension: 0.2,
-                                 pointRadius: 3,
-                                 pointHoverRadius: 6
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
                              }]
                          },
                          options: {
                              responsive: true,
          maintainAspectRatio: false,
                              interaction: { mode: 'index', intersect: false },
-                             scales: {
-                                 y: {
-                                     beginAtZero: true,
-                                     title: { display: true, text: 'Volume (kg)', color: 'rgba(255,255,255,0.7)' },
-                                     ticks: { color: 'rgba(255,255,255,0.6)' },
-                                     grid: { color: 'rgba(255,255,255,0.06)' }
-                                 },
-                                 x: {
-                                     title: { display: true, text: 'Training Day', color: 'rgba(255,255,255,0.7)' },
-                                     ticks: { autoSkip: true, maxTicksLimit: 12, maxRotation: 0, color: 'rgba(255,255,255,0.6)' },
-                                     grid: { color: 'rgba(255,255,255,0.06)' }
-                                 }
+
+scales: {
+  y: {
+    beginAtZero: true,
+    display: !isMobileView(),
+    ticks: { display: !isMobileView() },
+    grid: { display: !isMobileView() }
+  },
+  x: {
+    display: !isMobileView(),
+    ticks: { display: !isMobileView() },
+    grid: { display: !isMobileView() }
+  }
+
                              },
                              plugins: {
                                  title: { display: true, text: `Training Volume (Daily SUM) – ${displayName}`, color: 'rgba(255,255,255,0.85)' },
@@ -2833,12 +2896,17 @@
          labels,
          datasets: [{
          data: dataPoints,
-         borderColor: 'rgba(255,255,255,0.85)',
-         backgroundColor: 'rgba(255,255,255,0.10)',
-         borderWidth: 2,
-         tension: 0.2,
-         fill: false,
-         pointRadius: 3,
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
          }]
          },
          options: baseChartOptions(`Weight per Day – ${displayName}`, 'kg', true)
@@ -2857,12 +2925,17 @@
          labels,
          datasets: [{
          data: dataPoints,
-         borderColor: 'rgba(255,176,32,1)',
-         backgroundColor: 'rgba(255,176,32,0.10)',
-         borderWidth: 2,
-         tension: 0.2,
-         fill: false,
-         pointRadius: 3,
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
          }]
          },
          options: baseChartOptions(`Repetitions per Day – ${displayName}`, 'Reps', true)
@@ -2960,29 +3033,59 @@
              };
          }
          
-         function baseChartOptions(titleText, yTitle, beginAtZero) {
-             return {
-                 responsive: true,
-                 interaction: { mode: 'index', intersect: false },
-                 scales: {
-                     y: {
-                         beginAtZero: beginAtZero,
-                         title: { display: true, text: yTitle, color: 'rgba(255,255,255,0.7)' },
-                         ticks: { color: 'rgba(255,255,255,0.6)' },
-                         grid: { color: 'rgba(255,255,255,0.06)' }
-                     },
-                     x: {
-                         title: { display: true, text: 'Sets', color: 'rgba(255,255,255,0.7)' },
-                         ticks: { color: 'rgba(255,255,255,0.6)' },
-                         grid: { color: 'rgba(255,255,255,0.06)' }
-                     }
-                 },
-                 plugins: {
-                     title: { display: true, text: titleText, color: 'rgba(255,255,255,0.85)' },
-                     legend: { display: false }
-                 }
-             };
-         }
+function baseChartOptions(titleText, yTitle, beginAtZero) {
+  const mobile = isMobileView();
+
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+
+    scales: {
+      y: {
+        beginAtZero: beginAtZero,
+        display: !mobile,
+        ticks: {
+          display: !mobile,
+        },
+        grid: {
+          display: !mobile
+        },
+        title: {
+          display: !mobile,
+          text: yTitle,
+          color: 'rgba(255,255,255,0.7)'
+        }
+      },
+      x: {
+        display: !mobile,
+        ticks: {
+          display: !mobile
+        },
+        grid: {
+          display: !mobile
+        },
+        title: {
+          display: false
+        }
+      }
+    },
+
+    plugins: {
+      title: {
+        display: !mobile,
+        text: titleText,
+        color: 'rgba(255,255,255,0.85)'
+      },
+      legend: {
+        display: false
+      },
+      tooltip: {
+        enabled: true
+      }
+    }
+  };
+}
          
          async function renderSetsChartsForExercise(exerciseKey, dayKey = null, forceLatest = false) {
              const currentUser = auth.currentUser;
@@ -3047,13 +3150,17 @@
                              labels,
                              datasets: [{
                                  data: dataPoints,
-                                 borderColor: 'rgba(0, 208, 132, 1)',
-                                 backgroundColor: 'rgba(0, 208, 132, 0.12)',
-                                 borderWidth: 2,
-                                 fill: false,
-                                 tension: 0.2,
-                                 pointRadius: 3,
-                                 pointHoverRadius: 6
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
                              }]
                          },
                          options
@@ -3072,13 +3179,17 @@
                              labels,
                              datasets: [{
                                  data: dataPoints,
-                                 borderColor: 'rgba(255, 176, 32, 1)',
-                                 backgroundColor: 'rgba(255, 176, 32, 0.10)',
-                                 borderWidth: 2,
-                                 fill: false,
-                                 tension: 0.2,
-                                 pointRadius: 3,
-                                 pointHoverRadius: 6
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
                              }]
                          },
                          options
@@ -3097,13 +3208,17 @@
                              labels,
                              datasets: [{
                                  data: dataPoints,
-                                 borderColor: 'rgba(255, 255, 255, 0.85)',
-                                 backgroundColor: 'rgba(255, 255, 255, 0.10)',
-                                 borderWidth: 2,
-                                 fill: false,
-                                 tension: 0.2,
-                                 pointRadius: 3,
-                                 pointHoverRadius: 6
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
                              }]
                          },
                          options
@@ -3122,13 +3237,17 @@
                              labels,
                              datasets: [{
                                  data: dataPoints,
-                                 borderColor: 'rgba(255, 77, 77, 0.90)',
-                                 backgroundColor: 'rgba(255, 77, 77, 0.10)',
-                                 borderWidth: 2,
-                                 fill: false,
-                                 tension: 0.2,
-                                 pointRadius: 3,
-                                 pointHoverRadius: 6
+
+  borderColor: 'rgba(255,255,255,0.85)',
+  backgroundColor: 'rgba(255,255,255,0.08)',
+
+  fill: true,
+  tension: 0.25,
+
+  pointRadius: isMobileView() ? 0 : 3,
+  pointHoverRadius: isMobileView() ? 0 : 6,
+  borderWidth: isMobileView() ? 2 : 3
+
                              }]
                          },
                          options
