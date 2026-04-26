@@ -881,6 +881,90 @@
          align-self: center;
          }
          }
+/* ============================
+   MOBILE: FLAT LAYOUT
+   ============================ */
+@media (max-width: 640px) {
+
+  /* Allgemein weniger Padding */
+  .content {
+    padding: 12px;
+  }
+
+  /* Cards komplett auflösen */
+  .card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    margin-bottom: 18px;
+  }
+
+  /* Alle Chart-Container flach */
+  .chart-wrap {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 12px 0 22px 0;
+  }
+
+  /* Canvas etwas Luft geben (optische Trennung) */
+  .chart-wrap canvas {
+    width: 100% !important;
+  }
+
+  /* Exercise List – keine Kästen */
+  .exercise-row {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 10px 0;
+  }
+
+  /* Statt Kasten: feine Linie */
+  .exercise-row:not(:last-child) {
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* Menu Items im Drawer */
+  .menu-item {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 12px 0;
+  }
+
+  .menu-item:not(:last-child) {
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* Exercise Log Einträge */
+  .exercise-log-row {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 12px 0;
+  }
+
+  .exercise-log-row:not(:last-child) {
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* Login Hint flacher */
+  .login-hint {
+    background: rgba(255,255,255,0.03);
+    border: none;
+    border-radius: 12px;
+  }
+
+  /* Sets Meta Line weniger „boxed“ */
+  .sets-meta {
+    border: none;
+    padding: 0;
+  }
+}
       </style>
    </head>
    <body>
