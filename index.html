@@ -1017,6 +1017,39 @@
          margin-top: 0 !important;
          }
          }
+
+/* ============================
+NEUES CHART LAYOUT
+============================ */
+
+/* gestrichelte Linie */
+.chart-divider {
+  border-top: 1px dashed rgba(255,255,255,0.2);
+  margin-top: 14px;
+  margin-bottom: 12px;
+}
+
+/* graue Box unter Diagramm */
+.chart-info-box {
+  background: rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 12px;
+  margin: 0 6px 24px 6px; /* Abstand links/rechts + unten */
+}
+
+/* Titel im Kasten */
+.chart-info-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+/* Beschreibung im Kasten */
+.chart-info-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.35;
+}
       </style>
    </head>
    <body>
@@ -1055,12 +1088,6 @@
                      <button type="button" class="range-btn active" data-range="max">Max</button>
                   </div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Overall Training Performance</div>
-                        <div class="chart-desc">
-                           Total Training Volume and Performance.
-                        </div>
-                     </div>
                      <canvas id="overallChart"></canvas>
                   </div>
                   <div class="exercises-header">
@@ -1103,63 +1130,69 @@
                      </div>
                   </div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Intensity Volume</div>
-                        <div class="chart-desc">
-                           Total training volume per day, weighted by intensity.
-                        </div>
-                     </div>
                      <canvas id="ivPerDayChart"></canvas>
+
+  <div class="chart-divider"></div>
+
+  <div class="chart-info-box">
+    <div class="chart-info-title">Intensity Volume</div>
+    <div class="chart-info-desc">
+      Total training volume per day, weighted by intensity.
+    </div>
+  </div>
+
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Estimated 1RM</div>
-                        <div class="chart-desc">
-                           Highest estimated one‑rep max achieved per training day.
-                        </div>
-                     </div>
                      <canvas id="e1rmPerDayChart"></canvas>
+
+  <div class="chart-divider"></div>
+
+  <div class="chart-info-box">
+    <div class="chart-info-title">Estimated 1RM</div>
+    <div class="chart-info-desc">
+      Highest estimated one‑rep max achieved per training day.
+    </div>
+  </div>
+
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Max Weight</div>
-                        <div class="chart-desc">
-                           Highest weight lifted on each training day.
-                        </div>
-                     </div>
                      <canvas id="maxWeightPerDayChart"></canvas>
+
+<div class="chart-info-box">
+  <div class="chart-info-title">Max Weight</div>
+  <div class="chart-info-desc">
+    Highest weight lifted on each training day.
+  </div>
+</div>
+
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Training Volume</div>
-                        <div class="chart-desc">
-                           Total volume per day calculated as weight multiplied by repetitions.
-                        </div>
-                     </div>
-                     <canvas id="volumePerDayChart"></canvas>
+
+  <div class="chart-info-box">
+    <div class="chart-info-title">Training Volume</div>
+    <div class="chart-info-desc">
+      Total volume per day calculated as weight multiplied by repetitions.
+    </div>
+  </div>
+
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Weight</div>
-                        <div class="chart-desc">
-                           Maximum weight used across all sets per training day.
-                        </div>
-                     </div>
                      <canvas id="weightPerDayChart"></canvas>
+<div class="chart-info-box">
+  <div class="chart-info-title">Weight</div>
+  <div class="chart-info-desc">
+    Maximum weight used across all sets per training day.
+  </div>
+</div>
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Repetitions</div>
-                        <div class="chart-desc">
-                           Total number of repetitions performed per training day.
-                        </div>
-                     </div>
                      <canvas id="repsPerDayChart"></canvas>
+<div class="chart-info-box">
+  <div class="chart-info-title">Repetitions</div>
+  <div class="chart-info-desc">
+    Total number of repetitions performed per training day.
+  </div>
+</div>
                   </div>
                </div>
             </div>
@@ -1195,55 +1228,50 @@
                      <span>Selected day: <b id="setsSelectedDayLabel">—</b></span>
                      <span>Latest day: <b id="setsLatestDayLabel">—</b></span>
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Intensity Volume per Set</div>
-                        <div class="chart-desc">
-                           Intensity‑adjusted training volume for each individual set.
-                        </div>
-                     </div>
                      <canvas id="ivPerSetChart"></canvas>
+<div class="chart-info-box">
+  <div class="chart-info-title">Intensity Volume per Set</div>
+  <div class="chart-info-desc">
+    Intensity‑adjusted training volume for each individual set.
+  </div>
+</div>
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Estimated 1RM per Set</div>
-                        <div class="chart-desc">
-                           Estimated one‑rep max calculated for each set.
-                        </div>
-                     </div>
                      <canvas id="e1rmPerSetChart"></canvas>
+<div class="chart-info-box">
+  <div class="chart-info-title">Estimated 1RM per Set</div>
+  <div class="chart-info-desc">
+    Estimated one-rep max calculated for each set.
+  </div>
+</div>
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Weight per Set</div>
-                        <div class="chart-desc">
-                           Weight used in each individual set on the selected day.
-                        </div>
-                     </div>
                      <canvas id="maxWeightPerSetChart"></canvas>
+<div class="chart-info-box">
+  <div class="chart-info-title">Weight per Set</div>
+  <div class="chart-info-desc">
+    Weight used in each individual set on the selected day.
+  </div>
+</div>
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Volume per Set</div>
-                        <div class="chart-desc">
-                           Training volume per set calculated as weight multiplied by repetitions.
-                        </div>
-                     </div>
                      <canvas id="volumePerSetChart"></canvas>
+<div class="chart-info-box">
+  <div class="chart-info-title">Volume per Set</div>
+  <div class="chart-info-desc">
+    Training volume per set calculated as weight multiplied by repetitions.
+  </div>
+</div>
                   </div>
-                  <div style="height: 14px;"></div>
                   <div class="chart-wrap">
-                     <div class="chart-header">
-                        <div class="chart-title">Repetitions per Set</div>
-                        <div class="chart-desc">
-                           Number of repetitions completed in each set.
-                        </div>
-                     </div>
                      <canvas id="repsPerSetChart"></canvas>
+<div class="chart-info-box">
+  <div class="chart-info-title">Repetitions per Set</div>
+  <div class="chart-info-desc">
+    Number of repetitions completed in each set.
+  </div>
+</div>
                   </div>
                </div>
             </div>
