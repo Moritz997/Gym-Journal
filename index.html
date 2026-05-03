@@ -305,17 +305,6 @@
          }
          .exercise-metric.pos { color: rgba(0,208,132,0.95); }
          .exercise-metric.neg { color: rgba(255,77,77,0.90); }
-         .chart-wrap {
-         border: 1px solid var(--border);
-         background: rgba(255,255,255,0.02);
-         border-radius: var(--radius);
-         padding: 12px;
-         height: 240px; /* ✅ Mobile default */
-         }
-         @media (min-width: 768px) {
-         .chart-wrap {
-         height: 320px; /* ✅ Tablet & Desktop */
-         }
          }
          .chart-row {
          display: flex;
@@ -898,18 +887,6 @@
          padding: 0;
          margin-bottom: 18px;
          }
-         /* Alle Chart-Container flach */
-         .chart-wrap {
-         background: transparent;
-         border: none;
-         border-radius: 0;
-         padding: 0;
-         margin: 12px 0 22px 0;
-         }
-         /* Canvas etwas Luft geben (optische Trennung) */
-         .chart-wrap canvas {
-         width: 100% !important;
-         }
          /* Exercise List – keine Kästen */
          .exercise-row {
          background: transparent;
@@ -953,102 +930,90 @@
          padding: 0;
          }
          }
-         /* ============================
-         PROGRESS: weniger Abstand oberes Diagramm (Mobile)
-         ============================ */
-         @media (max-width: 640px) {
-         /* Weniger Abstand über dem ersten Diagramm */
-         #progressView .chart-wrap {
-         margin-top: 0 !important;
-         margin-bottom: 0;
-         }
-         /* Harte Spacer im Progress-Reiter entfernen */
-         #progressView > div > div[style*="height"] {
-         display: none;
-         }
-         /* Auswahl-Zeile kompakter */
-         #progressView .chart-row {
-         margin-bottom: 0;
-         }
-         }
-         @media (max-width: 640px) {
-         #progressView .chart-row {
-         margin-bottom: 0;
-         }
-         }
-         /* ============================
-         CHART HEADER – sauberer Abstand
-         ============================ */
-         .chart-wrap {
-         margin-bottom: 36px;          /* mehr Abstand zwischen Charts */
-         }
-         .chart-header {
-         margin-bottom: 14px;          /* Abstand ZWISCHEN Titel und Chart */
-         }
-         .chart-title {
-         font-size: 14px;
-         font-weight: 700;
-         line-height: 1.25;
-         }
-         .chart-desc {
-         margin-top: 4px;
-         font-size: 12px;
-         line-height: 1.35;
-         color: var(--muted);
-         }
-         /* Canvas niemals über Header legen */
-         .chart-wrap canvas {
-         display: block;
-         }
-         /* Mobile: noch etwas luftiger */
-         @media (max-width: 640px) {
-         .chart-wrap {
-         margin-bottom: 42px;
-         }
-         .chart-header {
-         margin-bottom: 16px;
-         }
-         }
-         /* ============================
-         PROGRESS: kein Abstand vor erstem Chart
-         ============================ */
-         @media (max-width: 640px) {
-         #progressView .chart-wrap:first-of-type {
-         margin-top: 0 !important;
-         }
-         }
-
 /* ============================
-NEUES CHART LAYOUT
+CHART LAYOUT – CLEAN VERSION
 ============================ */
 
-/* gestrichelte Linie */
-.chart-divider {
-  border-top: 1px dashed rgba(255,255,255,0.2);
-  margin-top: 14px;
+/* Hauptcontainer für jedes Diagramm */
+.chart-wrap {
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius);
+  padding: 12px;
   margin-bottom: 12px;
+  display: block;
 }
 
-/* graue Box unter Diagramm */
+/* Canvas Größe kontrollieren */
+.chart-wrap canvas {
+  width: 100% !important;
+  max-height: 240px;
+  display: block;
+}
+
+/* Desktop größer */
+@media (min-width: 768px) {
+  .chart-wrap canvas {
+    max-height: 320px;
+  }
+}
+
+/* ============================
+TRENNLINIE
+============================ */
+
+.chart-divider {
+  border-top: 1px dashed rgba(255,255,255,0.2);
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+/* ============================
+INFO BOX (unter Chart)
+============================ */
+
 .chart-info-box {
   background: rgba(255,255,255,0.06);
   border-radius: 14px;
   padding: 12px;
-  margin: 0 6px 24px 6px; /* Abstand links/rechts + unten */
+  margin: 0 6px 24px 6px;
 }
 
-/* Titel im Kasten */
+/* Titel */
 .chart-info-title {
   font-size: 13px;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
-/* Beschreibung im Kasten */
+/* Beschreibung */
 .chart-info-desc {
   font-size: 12px;
   color: var(--muted);
   line-height: 1.35;
+}
+
+/* ============================
+MOBILE OPTIMIERUNG
+============================ */
+
+@media (max-width: 640px) {
+
+  .chart-wrap {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 12px 0;
+  }
+
+  .chart-wrap canvas {
+    max-height: 220px;
+  }
+
+  .chart-info-box {
+    margin: 0 4px 28px 4px;
+  }
 }
       </style>
    </head>
