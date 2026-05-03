@@ -1253,7 +1253,7 @@
         <!-- Floating buttons -->
         <div class="fab-bar">
             <button id="fabCreate" class="fab" type="button">Create</button>
-            <button id="fabAccount" class="fab" type="button">Account</button>
+            <button id="fabExerciseLog" class="fab" type="button">Exercise Log</button>
         </div>
         <!-- Drawer overlay -->
         <div id="overlay" class="overlay"></div>
@@ -1368,10 +1368,24 @@
         <!-- Login Overlay -->
         <div id="loginOverlay" class="login-overlay hidden">
             <div class="login-panel">
-                <h2>Welcome 👋</h2>
+                <h2>Welcome!</h2>
                 <p>Please log in to continue.</p>
                 <input type="email" id="loginEmailOverlay" placeholder="Email" />
+
                 <input type="password" id="loginPasswordOverlay" placeholder="Password" />
+
+                <div id="passwordError" style="color: #ff4d4d; font-size: 12px; display: none; margin-top: 4px"></div>
+
+                <input type="password" id="authPasswordConfirm" placeholder="Confirm Password" style="display: none" />
+
+                <div
+                    id="confirmPasswordError"
+                    style="color: #ff4d4d; font-size: 12px; display: none; margin-top: 4px"
+                ></div>
+
+                <input type="text" id="authNickname" placeholder="Nickname" style="display: none" />
+                <button id="resendVerificationButton" style="display: none">Resend verification email</button>
+
                 <div class="login-actions">
                     <button id="loginOverlayButton" class="accent-btn">Login</button>
                     <button id="registerOverlayButton" class="link-btn muted">Create account</button>
@@ -1445,10 +1459,14 @@
 
             const authEmailInput = document.getElementById("authEmail");
             const authPasswordInput = document.getElementById("authPassword");
+            const nicknameInput = document.getElementById("authNickname");
+            const passwordConfirmInput = document.getElementById("authPasswordConfirm");
             const registerButton = document.getElementById("registerButton");
             const loginButton = document.getElementById("loginButton");
             const logoutButton = document.getElementById("logoutButton");
             const userStatusParagraph = document.getElementById("userStatus");
+            const passwordError = document.getElementById("passwordError");
+            const confirmPasswordError = document.getElementById("confirmPasswordError");
 
             const rangeFilterDiv = document.getElementById("rangeFilter");
             const progressRangeFilterDiv = document.getElementById("progressRangeFilter");
@@ -1486,7 +1504,7 @@
             const repsPerSetChartCanvas = document.getElementById("repsPerSetChart");
 
             const fabCreate = document.getElementById("fabCreate");
-            const fabAccount = document.getElementById("fabAccount");
+            const fabExerciseLog = document.getElementById("fabExerciseLog");
 
             const createModal = document.getElementById("createModal");
             const createModalOverlay = document.getElementById("createModalOverlay");
@@ -1512,57 +1530,96 @@
             const loginPasswordOverlay = document.getElementById("loginPasswordOverlay");
 
             loginOverlayButton.addEventListener("click", async () => {
-                try {
-                    const email = loginEmailOverlay.value;
-                    const password = loginPasswordOverlay.value;
-                    const cred = await auth.signInWithEmailAndPassword(email, password);
+                const email = loginEmailOverlay.value;
+                const password = loginPasswordOverlay.value;
 
-                    // 🔐 BLOCKIEREN, wenn nicht verifiziert
-                    if (!cred.user.emailVerified) {
-                        await auth.signOut();
-                        alert("Please verify your email address before logging in.");
+                // =========================
+                // ✅ LOGIN
+                // =========================
+                if (authMode === "login") {
+                    try {
+                        const cred = await auth.signInWithEmailAndPassword(email, password);
+
+                        if (!cred.user.emailVerified) {
+                            await auth.signOut();
+                            alert("Please verify your email.");
+                            return;
+                        }
+
+                        loginOverlay.classList.add("hidden");
+                        activateTab("training");
+                    } catch (err) {
+                        console.log("ERROR:", err.code);
+
+                        if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
+                            switchToRegisterMode();
+                            return;
+                        }
+
+                        alert(err.message);
+                    }
+
+                    return;
+                }
+
+                // =========================
+                // ✅ REGISTER
+                // =========================
+                if (authMode === "register") {
+                    validateRegisterInputs();
+
+                    // ❗ verhindert submit
+                    if (!isValidPassword(password)) return;
+                    if (password !== passwordConfirmInput.value) return;
+
+                    const nickname = nicknameInput.value;
+
+                    if (!nickname || nickname.trim().length < 2) {
+                        alert("Please enter a valid nickname.");
                         return;
                     }
 
-                    // ✅ Erfolgs-UI:
-                    loginOverlay.classList.add("hidden");
+                    try {
+                        const cred = await auth.createUserWithEmailAndPassword(email, password);
 
-                    // ➜ direkt Startbildschirm
-                    activateTab("training");
+                        await new Promise((resolve) => setTimeout(resolve, 300));
 
-                    // ✅ Erfolgsmeldung unten anzeigen
-                    displayMessage("Successfully logged in.", false);
-                } catch (err) {
-                    alert(err.message);
+                        await db.collection("users").doc(cred.user.uid).set({
+                            nickname: nickname,
+                            admin: false,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        });
+
+                        await cred.user.sendEmailVerification();
+                        await auth.signOut();
+
+                        // ✅ Message anzeigen
+                        displayMessage(
+                            "✅ Account created! <br>Please check your email to verify your account.<br>If you don’t see it, check your spam folder.",
+                            false
+                        );
+
+                        // zurück zu Login
+                        switchToLoginMode();
+
+                        // ✅ Overlay schließen
+                        loginOverlay.classList.add("hidden");
+                    } catch (err) {
+                        alert(err.message);
+                    }
                 }
             });
 
+            loginPasswordOverlay.addEventListener("input", validateRegisterInputs);
+            passwordConfirmInput.addEventListener("input", validateRegisterInputs);
+
             const registerOverlayButton = document.getElementById("registerOverlayButton");
 
-            registerOverlayButton.addEventListener("click", async () => {
-                try {
-                    const email = loginEmailOverlay.value;
-                    const password = loginPasswordOverlay.value;
-
-                    if (!email || !password) {
-                        alert("Please enter email and password.");
-                        return;
-                    }
-
-                    const cred = await auth.createUserWithEmailAndPassword(email, password);
-
-                    // ✅ Verifizierungs-Mail senden
-                    await cred.user.sendEmailVerification();
-
-                    // 🔐 Direkt ausloggen – kein Zugriff ohne Verifikation
-                    await auth.signOut();
-
-                    alert("Account created! Please check your email and verify your address before logging in.");
-
-                    loginEmailOverlay.value = "";
-                    loginPasswordOverlay.value = "";
-                } catch (err) {
-                    alert(err.message);
+            registerOverlayButton.addEventListener("click", () => {
+                if (authMode === "login") {
+                    switchToRegisterMode();
+                } else {
+                    switchToLoginMode();
                 }
             });
 
@@ -1606,9 +1663,110 @@
             let activeRangeTraining = "max";
             let activeRangeProgress = "max";
 
+            let authMode = "login"; // "login" oder "register"
+
             // ============================
             // Helpers
             // ============================
+
+            function validateRegisterInputs() {
+                const password = loginPasswordOverlay.value;
+                const confirmPassword = passwordConfirmInput.value;
+
+                let isValid = true;
+
+                if (!isValidPassword(password)) {
+                    passwordError.textContent = "Min. 8 chars, upper, lower, number, special.";
+                    passwordError.style.display = "block";
+                    isValid = false;
+                } else {
+                    passwordError.style.display = "none";
+                }
+
+                if (confirmPassword && password !== confirmPassword) {
+                    confirmPasswordError.textContent = "Passwords do not match.";
+                    confirmPasswordError.style.display = "block";
+                    isValid = false;
+                } else {
+                    confirmPasswordError.style.display = "none";
+                }
+
+                loginOverlayButton.disabled = authMode === "register" && !isValid;
+                loginOverlayButton.style.opacity = loginOverlayButton.disabled ? "0.5" : "1";
+            }
+
+            function switchToRegisterMode(email = "", password = "") {
+                // ✅ Werte übernehmen
+                loginEmailOverlay.value = email;
+                loginPasswordOverlay.value = password;
+
+                // ✅ Zusätzliche Felder im OVERLAY anzeigen
+                nicknameInput.style.display = "block";
+                passwordConfirmInput.style.display = "block";
+
+                // ✅ Overlay bleibt offen (!) → kein Drawer
+                loginOverlay.classList.remove("hidden");
+
+                // ✅ UI Hinweis
+                // (falls du Text hast, optional)
+                // z.B. Titel ändern später
+
+                // ✅ Fokus
+                nicknameInput.focus();
+
+                validateRegisterInputs();
+            }
+
+            function resetAuthForm() {
+                authEmailInput.value = "";
+                authPasswordInput.value = "";
+                passwordConfirmInput.value = "";
+                nicknameInput.value = "";
+
+                nicknameInput.style.display = "none";
+                passwordConfirmInput.style.display = "none";
+            }
+
+            function switchToRegisterMode() {
+                authMode = "register";
+
+                // Felder anzeigen
+                nicknameInput.style.display = "block";
+                passwordConfirmInput.style.display = "block";
+
+                // Button ändern
+                loginOverlayButton.textContent = "Create Account";
+                registerOverlayButton.textContent = "Back to login";
+
+                // Validierung starten
+                validateRegisterInputs();
+            }
+
+            function switchToLoginMode() {
+                authMode = "login";
+
+                // Felder verstecken
+                nicknameInput.style.display = "none";
+                passwordConfirmInput.style.display = "none";
+
+                // Button zurücksetzen
+                loginOverlayButton.textContent = "Login";
+                registerOverlayButton.textContent = "Create account";
+
+                // Fehler entfernen
+                passwordError.style.display = "none";
+                confirmPasswordError.style.display = "none";
+            }
+
+            function isValidPassword(password) {
+                return (
+                    password.length >= 8 &&
+                    /[A-Z]/.test(password) && // Großbuchstabe
+                    /[a-z]/.test(password) && // Kleinbuchstabe
+                    /[0-9]/.test(password) && // Zahl
+                    /[^A-Za-z0-9]/.test(password) // Sonderzeichen
+                );
+            }
 
             function normalizeExerciseInput(input) {
                 return input.trim().toLowerCase().replace(/\s+/g, " ");
@@ -2041,8 +2199,8 @@
                 exerciseLogSheet.classList.remove("open");
                 exerciseLogSheet.setAttribute("aria-hidden", "true");
 
-                // Menü danach wieder anzeigen
-                openDrawer();
+                closeDrawer(); // falls offen
+                activateTab("training"); // zurück zur Home
             }
 
             function returnToExerciseLog() {
@@ -2097,49 +2255,57 @@
                 });
             }
 
-            // ============================
-            // Authentication
-            // ============================
-            registerButton.addEventListener("click", async () => {
-                const email = authEmailInput.value;
-                const password = authPasswordInput.value;
-
-                try {
-                    const cred = await auth.createUserWithEmailAndPassword(email, password);
-                    // ✅ Verifizierungs-Mail senden (nutzt dein Firebase Template)
-                    await cred.user.sendEmailVerification();
-                    // 🔐 User sofort wieder ausloggen
-                    await auth.signOut();
-
-                    displayMessage(
-                        "Registration successful! Please check your emails and verify your address before logging in.",
-                        false
-                    );
-
-                    closeDrawer();
-                } catch (error) {
-                    displayMessage(`Registration error: ${error.message}`, true);
-                    console.error("Registration error:", error);
-                }
-            });
-
             loginButton.addEventListener("click", async () => {
                 const email = authEmailInput.value;
                 const password = authPasswordInput.value;
 
                 try {
-                    await auth.signInWithEmailAndPassword(email, password);
-                    displayMessage(`User ${email} successfully logged in!`, false);
-                    closeDrawer();
+                    // ✅ Login mit Ergebnis speichern (! wichtig)
+                    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+
+                    // ✅ EMAIL VERIFICATION CHECK
+                    if (!userCredential.user.emailVerified) {
+                        await auth.signOut();
+
+                        // ✅ Resend Button anzeigen
+                        resendVerificationButton.style.display = "block";
+
+                        alert("Please verify your email first. You can resend the email below.");
+                        return;
+                    }
+
+                    // ✅ erfolgreicher Login
+                    resendVerificationButton.style.display = "none";
+
+                    resetAuthForm();
                 } catch (error) {
-                    displayMessage(`Login error: ${error.message}`, true);
-                    console.error("Login error:", error);
+                    alert(error.message);
                 }
             });
 
+            const resendVerificationButton = document.getElementById("resendVerificationButton");
+
+            if (resendVerificationButton) {
+                resendVerificationButton.addEventListener("click", async () => {
+                    const user = auth.currentUser;
+
+                    if (!user) {
+                        alert("Please log in first.");
+                        return;
+                    }
+
+                    try {
+                        await user.sendEmailVerification();
+                        alert("Verification email sent again ✅");
+                    } catch (err) {
+                        alert("Error: " + err.message);
+                    }
+                });
+            }
             logoutButton.addEventListener("click", async () => {
                 try {
                     await auth.signOut();
+                    resetAuthForm();
                     displayMessage("Successfully logged out.", false);
                 } catch (error) {
                     displayMessage(`Logout error: ${error.message}`, true);
@@ -2175,7 +2341,10 @@
                         console.error("❌ User doc creation failed", err);
                     }
 
-                    userStatusParagraph.textContent = `Logged in as: ${user.email}`;
+                    const userDoc = await db.collection("users").doc(user.uid).get();
+                    const nickname = userDoc.data()?.nickname || user.email;
+
+                    userStatusParagraph.textContent = `Welcome, ${nickname}`;
                     logoutButton.style.display = "inline-flex";
                     registerButton.style.display = "none";
                     loginButton.style.display = "none";
@@ -3357,7 +3526,13 @@
             // Drawer open/close for FAB
             // ============================
             fabCreate.addEventListener("click", () => openCreateModal());
-            fabAccount.addEventListener("click", () => openDrawer());
+
+            fabExerciseLog.addEventListener("click", () => {
+                exerciseLogSheet.classList.add("open");
+                exerciseLogSheet.setAttribute("aria-hidden", "false");
+                renderExerciseLog();
+            });
+
             // ============================
             // Exercise Log Sheet – Swipe down to close (Mobile)
             // ============================
